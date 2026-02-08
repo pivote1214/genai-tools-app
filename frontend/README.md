@@ -42,6 +42,8 @@ npm run dev
 
 ## テストの実行
 
+### ユニットテスト・統合テスト
+
 ```bash
 # すべてのテストを実行
 npm test
@@ -52,6 +54,21 @@ npm run test:watch
 # カバレッジレポートを生成
 npm run test:coverage
 ```
+
+### E2Eテスト（Playwright）
+
+```bash
+# E2Eテストを実行
+npm run test:e2e
+
+# UIモードでE2Eテストを実行（デバッグに便利）
+npm run test:e2e:ui
+
+# ヘッドモードでE2Eテストを実行（ブラウザを表示）
+npm run test:e2e:headed
+```
+
+**注意**: E2Eテストは自動的に開発サーバーを起動しますが、バックエンドサーバーは別途起動しておく必要があります。
 
 ## ビルド
 
