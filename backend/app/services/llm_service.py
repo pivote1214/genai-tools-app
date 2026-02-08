@@ -25,9 +25,9 @@ class LLMService:
         self.model_mapping = {
             'gpt-4o': 'openai',
             'gpt-4o-mini': 'openai',
-            'claude-opus-4.5': 'claude',
-            'claude-sonnet-4.5': 'claude',
-            'claude-haiku-4.5': 'claude'
+            'claude-opus-4-5': 'claude',
+            'claude-sonnet-4-5': 'claude',
+            'claude-haiku-4-5': 'claude'
         }
     
     def has_api_key(self, model: str) -> bool:

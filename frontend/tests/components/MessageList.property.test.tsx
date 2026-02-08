@@ -22,7 +22,7 @@ describe('MessageList - Property-Based Tests', () => {
             id: fc.string({ minLength: 1 }),
             role: fc.constantFrom('user' as const, 'assistant' as const),
             content: fc.string({ minLength: 1 }),
-            model: fc.constantFrom('gpt-4o', 'gpt-4o-mini', 'claude-sonnet-4.5', 'claude-haiku-4.5'),
+            model: fc.constantFrom('gpt-4o', 'gpt-4o-mini', 'claude-opus-4-5', 'claude-sonnet-4-5', 'claude-haiku-4-5'),
             timestamp: fc.date(),
           }),
           { minLength: 1, maxLength: 20 }
@@ -56,7 +56,7 @@ describe('MessageList - Property-Based Tests', () => {
           id: fc.string({ minLength: 1 }),
           role: fc.constantFrom('user' as const, 'assistant' as const),
           content: fc.string({ minLength: 1 }),
-          model: fc.constantFrom('gpt-4o', 'gpt-4o-mini', 'claude-sonnet-4.5', 'claude-haiku-4.5'),
+          model: fc.constantFrom('gpt-4o', 'gpt-4o-mini', 'claude-opus-4-5', 'claude-sonnet-4-5', 'claude-haiku-4-5'),
           timestamp: fc.date(),
         }),
         (message: Message) => {
@@ -89,7 +89,7 @@ describe('MessageList - Property-Based Tests', () => {
             id: fc.string({ minLength: 1 }),
             role: fc.constantFrom('user' as const, 'assistant' as const),
             content: fc.string({ minLength: 1 }),
-            model: fc.constantFrom('gpt-4o', 'gpt-4o-mini', 'claude-sonnet-4.5', 'claude-haiku-4.5'),
+            model: fc.constantFrom('gpt-4o', 'gpt-4o-mini', 'claude-opus-4-5', 'claude-sonnet-4-5', 'claude-haiku-4-5'),
             timestamp: fc.date(),
           }),
           { minLength: 2, maxLength: 10 }

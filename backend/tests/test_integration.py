@@ -239,15 +239,16 @@ class TestModelsEndpoint:
             assert response.status_code == 200
             models = response.json()
             
-            # 4つのモデルが返されることを確認
-            assert len(models) == 4
+            # 5つのモデルが返されることを確認
+            assert len(models) == 5
             
             # モデルIDを確認
             model_ids = [model["id"] for model in models]
             assert "gpt-4o" in model_ids
             assert "gpt-4o-mini" in model_ids
-            assert "claude-sonnet-4.5" in model_ids
-            assert "claude-haiku-4.5" in model_ids
+            assert "claude-opus-4-5" in model_ids
+            assert "claude-sonnet-4-5" in model_ids
+            assert "claude-haiku-4-5" in model_ids
     
     def test_get_models_openai_only(self, client):
         """

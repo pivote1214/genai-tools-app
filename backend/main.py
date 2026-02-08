@@ -127,13 +127,19 @@ async def get_models():
     if anthropic_key:
         models.extend([
             ModelInfo(
-                id="claude-sonnet-4.5",
+                id="claude-opus-4-5",
+                name="Claude 4.5 Opus",
+                provider="claude",
+                description="Claudeの高性能モデル"
+            ),
+            ModelInfo(
+                id="claude-sonnet-4-5",
                 name="Claude 4.5 Sonnet",
                 provider="claude",
                 description="Claudeのバランス型モデル"
             ),
             ModelInfo(
-                id="claude-haiku-4.5",
+                id="claude-haiku-4-5",
                 name="Claude 4.5 Haiku",
                 provider="claude",
                 description="Claudeの高速モデル"

@@ -224,7 +224,13 @@ describe('ChatService', () => {
           description: 'OpenAI GPT-5.2 model',
         },
         {
-          id: 'claude-sonnet-4.5',
+          id: 'claude-opus-4-5',
+          name: 'Claude Opus 4.5',
+          provider: 'claude',
+          description: 'Anthropic Claude Opus 4.5',
+        },
+        {
+          id: 'claude-sonnet-4-5',
           name: 'Claude Sonnet 4.5',
           provider: 'claude',
           description: 'Anthropic Claude Sonnet 4.5',
@@ -242,9 +248,10 @@ describe('ChatService', () => {
 
       // 検証: 要件 2.1
       expect(models).toEqual(mockModels);
-      expect(models).toHaveLength(2);
+      expect(models).toHaveLength(3);
       expect(models[0].id).toBe('gpt-5.2');
-      expect(models[1].id).toBe('claude-sonnet-4.5');
+      expect(models[1].id).toBe('claude-opus-4-5');
+      expect(models[2].id).toBe('claude-sonnet-4-5');
     });
 
     it('should handle HTTP errors when fetching models', async () => {

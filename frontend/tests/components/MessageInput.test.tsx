@@ -6,7 +6,8 @@ import type { ModelInfo } from '../../src/types';
 describe('MessageInput', () => {
   const mockModels: ModelInfo[] = [
     { id: 'gpt-4o', name: 'GPT-4o', provider: 'openai', description: 'Test model' },
-    { id: 'claude-sonnet-4.5', name: 'Claude Sonnet 4.5', provider: 'claude', description: 'Test model' },
+    { id: 'claude-opus-4-5', name: 'Claude Opus 4.5', provider: 'claude', description: 'Test model' },
+    { id: 'claude-sonnet-4-5', name: 'Claude Sonnet 4.5', provider: 'claude', description: 'Test model' },
   ];
 
   const defaultProps = {
@@ -70,8 +71,8 @@ describe('MessageInput', () => {
     const onModelChange = vi.fn();
     render(<MessageInput {...defaultProps} onModelChange={onModelChange} />);
     const select = screen.getByRole('combobox');
-    fireEvent.change(select, { target: { value: 'claude-sonnet-4.5' } });
-    expect(onModelChange).toHaveBeenCalledWith('claude-sonnet-4.5');
+    fireEvent.change(select, { target: { value: 'claude-sonnet-4-5' } });
+    expect(onModelChange).toHaveBeenCalledWith('claude-sonnet-4-5');
   });
 
   it('利用可能なモデルが全て表示される', () => {

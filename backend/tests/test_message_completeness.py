@@ -18,9 +18,9 @@ from datetime import datetime
 AVAILABLE_MODELS = [
     'gpt-4o',
     'gpt-4o-mini',
-    'claude-opus-4.5',
-    'claude-sonnet-4.5',
-    'claude-haiku-4.5'
+    'claude-opus-4-5',
+    'claude-sonnet-4-5',
+    'claude-haiku-4-5'
 ]
 
 

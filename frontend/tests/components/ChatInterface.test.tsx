@@ -14,7 +14,8 @@ vi.mock('../../src/services/ChatService', () => ({
 describe('ChatInterface', () => {
   const mockModels: ModelInfo[] = [
     { id: 'gpt-4o', name: 'GPT-4o', provider: 'openai', description: 'Test model' },
-    { id: 'claude-sonnet-4.5', name: 'Claude Sonnet 4.5', provider: 'claude', description: 'Test model' },
+    { id: 'claude-opus-4-5', name: 'Claude Opus 4.5', provider: 'claude', description: 'Test model' },
+    { id: 'claude-sonnet-4-5', name: 'Claude Sonnet 4.5', provider: 'claude', description: 'Test model' },
   ];
 
   beforeEach(() => {
@@ -119,9 +120,9 @@ describe('ChatInterface', () => {
     });
 
     const select = screen.getByRole('combobox');
-    fireEvent.change(select, { target: { value: 'claude-sonnet-4.5' } });
+    fireEvent.change(select, { target: { value: 'claude-sonnet-4-5' } });
 
-    expect(select).toHaveValue('claude-sonnet-4.5');
+    expect(select).toHaveValue('claude-sonnet-4-5');
   });
 
   it('ストリーミングレスポンスが逐次表示される', async () => {
