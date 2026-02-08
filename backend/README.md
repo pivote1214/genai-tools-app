@@ -6,7 +6,7 @@ FastAPIを使用したAIチャットアプリケーションのバックエン�
 
 - Python 3.12+
 - uv (Pythonパッケージマネージャー)
-- OpenAI APIキーまたはAnthropic (Claude) APIキー（少なくとも1つ必要）
+- OpenAI APIキー / Anthropic (Claude) APIキー / Google Gemini APIキー（少なくとも1つ必要）
 
 ## セットアップ
 
@@ -25,6 +25,11 @@ OPENAI_API_KEY=your_openai_api_key_here
 # Anthropic (Claude) API設定（Claudeモデルを使用する場合）
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
 
+# Google Gemini API設定（Geminiモデルを使用する場合）
+GEMINI_API_KEY=your_gemini_api_key_here
+# 互換: GOOGLE_API_KEYでも可
+# GOOGLE_API_KEY=your_google_api_key_here
+
 # データベース設定（デフォルトのまま使用可能）
 DATABASE_URL=sqlite:///./chat.db
 
@@ -37,8 +42,15 @@ FRONTEND_URL=http://localhost:5173
 ```
 
 **重要**: 
-- 少なくとも`OPENAI_API_KEY`または`ANTHROPIC_API_KEY`のいずれか1つを設定する必要があります。
-- 両方のAPIキーを設定すると、すべてのモデルが利用可能になります。
+- 少なくとも`OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `GEMINI_API_KEY`（または`GOOGLE_API_KEY`）のいずれか1つを設定する必要があります。
+- 複数のAPIキーを設定すると、対応するすべてのモデルが利用可能になります。
+
+### 1.1 Google Gemini APIキーの取得手順
+
+1. [Google AI Studio](https://aistudio.google.com/apikey) を開く
+2. `Create API key` をクリックしてキーを発行する
+3. `backend/.env` に `GEMINI_API_KEY=...` を設定する（必要なら `GOOGLE_API_KEY=...` でも可）
+4. サーバーを再起動し、`GET /api/models` に Gemini モデルが含まれることを確認する
 
 ### 2. 依存関係のインストール
 
