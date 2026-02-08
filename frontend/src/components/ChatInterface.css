@@ -1,11 +1,16 @@
+.chat-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #e9eef5;
+}
+
 .chat-interface {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
+  flex: 1;
+  min-width: 0;
   background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .chat-header {
@@ -59,4 +64,10 @@
 
 .error-close:hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 900px) {
+  .chat-layout {
+    flex-direction: column;
+  }
 }
