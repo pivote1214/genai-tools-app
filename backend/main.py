@@ -10,6 +10,10 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# .envファイルを読み込み
+load_dotenv()
 
 from app.services.llm_service import LLMService
 from app.repositories.message_repository import MessageRepository
@@ -56,9 +60,10 @@ llm_service = LLMService()
 message_repository = MessageRepository()
 
 # CORS設定
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # フロントエンドのURL
+    allow_origins=[frontend_url],  # フロントエンドのURL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
