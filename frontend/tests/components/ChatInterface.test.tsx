@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { ChatInterface } from './ChatInterface';
-import { chatService } from '../services/ChatService';
-import { ModelInfo } from '../types';
+import { ChatInterface } from '../../src/components/ChatInterface';
+import { chatService } from '../../src/services/ChatService';
+import { ModelInfo } from '../../src/types';
 
-vi.mock('../services/ChatService', () => ({
+vi.mock('../../src/services/ChatService', () => ({
   chatService: {
     getModels: vi.fn(),
     sendMessage: vi.fn(),

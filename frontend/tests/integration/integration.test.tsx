@@ -7,7 +7,7 @@ import { describe, it, expect, beforeAll, afterAll, afterEach, vi } from 'vitest
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse, delay } from 'msw';
-import { ChatInterface } from './components/ChatInterface';
+import { ChatInterface } from '../../src/components/ChatInterface';
 
 // モックサーバーのセットアップ
 const server = setupServer();
