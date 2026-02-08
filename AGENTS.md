@@ -1,4 +1,42 @@
-# uvの使用
+# Python
+
+## Coding Style
+
+### Standards
+
+- Follow **PEP 8** conventions
+- Use **type annotations** on all function signatures
+
+### Immutability
+
+Prefer immutable data structures:
+
+```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class User:
+    name: str
+    email: str
+
+from typing import NamedTuple
+
+class Point(NamedTuple):
+    x: float
+    y: float
+```
+
+### Formatting
+
+- **black** for code formatting
+- **isort** for import sorting
+- **ruff** for linting
+
+### Reference
+
+See skill: `python-patterns` for comprehensive Python idioms and patterns.
+
+## uv
 
 ```bash
 # 1. 新規プロジェクト作成
@@ -22,5 +60,30 @@ uv run python -V
 uv run pytest
 ```
 
-# そのほかの制約
-- ユーザーとの会話は日本語で行うこと
+## Testing
+
+### Framework
+
+Use **pytest** as the testing framework.
+
+### Coverage
+
+```bash
+uv pytest --cov=src --cov-report=term-missing
+```
+
+### Test Organization
+
+Use `pytest.mark` for test categorization:
+
+```python
+import pytest
+
+@pytest.mark.unit
+def test_calculate_total():
+    ...
+
+@pytest.mark.integration
+def test_database_connection():
+    ...
+```
