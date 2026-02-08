@@ -54,6 +54,7 @@ def test_sse_connection_established(client, mock_llm_service, mock_message_repos
         json={
             "message": "Hello",
             "model": "gpt-4o",
+            "conversation_id": "test-conversation",
             "history": []
         }
     )
@@ -75,6 +76,7 @@ def test_sse_streaming_response(client, mock_llm_service, mock_message_repositor
         json={
             "message": "Test message",
             "model": "gpt-4o",
+            "conversation_id": "test-conversation",
             "history": []
         }
     )
@@ -102,6 +104,7 @@ def test_sse_connection_close_on_completion(client, mock_llm_service, mock_messa
         json={
             "message": "Test",
             "model": "gpt-4o",
+            "conversation_id": "test-conversation",
             "history": []
         }
     )
@@ -131,6 +134,7 @@ def test_sse_model_not_available(client, mock_message_repository):
             json={
                 "message": "Test",
                 "model": "invalid-model",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )

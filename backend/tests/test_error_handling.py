@@ -49,6 +49,7 @@ def test_rate_limit_error_handling(client, mock_message_repository):
             json={
                 "message": "Test",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -88,6 +89,7 @@ def test_authentication_error_handling(client, mock_message_repository):
             json={
                 "message": "Test",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -126,6 +128,7 @@ def test_network_error_handling(client, mock_message_repository):
             json={
                 "message": "Test",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -164,6 +167,7 @@ def test_unexpected_error_handling(client, mock_message_repository):
             json={
                 "message": "Test",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -203,6 +207,7 @@ def test_error_state_maintenance(client, mock_message_repository):
             json={
                 "message": "Test 1",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -220,6 +225,7 @@ def test_error_state_maintenance(client, mock_message_repository):
             json={
                 "message": "Test 2",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -252,6 +258,7 @@ def test_database_error_does_not_affect_user(client):
                 json={
                     "message": "Test",
                     "model": "gpt-4o",
+                    "conversation_id": "test-conversation",
                     "history": []
                 }
             )
@@ -277,6 +284,7 @@ def test_model_not_available_error(client, mock_message_repository):
             json={
                 "message": "Test",
                 "model": "unavailable-model",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )

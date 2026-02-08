@@ -56,6 +56,7 @@ class TestChatIntegration:
             json={
                 "message": "Hello",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -106,6 +107,7 @@ class TestChatIntegration:
             json={
                 "message": "Test",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -146,6 +148,7 @@ class TestChatIntegration:
             json={
                 "message": "Test",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -172,6 +175,7 @@ class TestChatIntegration:
             json={
                 "message": "Test",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )
@@ -199,6 +203,7 @@ class TestChatIntegration:
             json={
                 "message": "Follow-up question",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": [
                     {"role": "user", "content": "First message"},
                     {"role": "assistant", "content": "First response"}
@@ -293,6 +298,7 @@ class TestDatabaseIntegration:
             json={
                 "message": "Test message",
                 "model": "gpt-4o",
+                "conversation_id": "test-conversation",
                 "history": []
             }
         )

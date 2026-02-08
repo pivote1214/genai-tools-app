@@ -56,6 +56,7 @@ def test_chat_routes_selected_model(client, mock_llm_service, mock_message_repos
         json={
             "message": "routing test",
             "model": model,
+            "conversation_id": "test-conversation",
             "history": [],
         },
     )
