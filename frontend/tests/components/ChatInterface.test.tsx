@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ChatInterface } from '../../src/components/ChatInterface';
 import { chatService } from '../../src/services/ChatService';
@@ -10,9 +10,12 @@ vi.mock('../../src/services/ChatService', () => ({
     getConversations: vi.fn(),
     createConversation: vi.fn(),
     getConversationMessages: vi.fn(),
+    deleteConversation: vi.fn(),
     sendMessage: vi.fn(),
   },
 }));
+
+const confirmSpy = vi.spyOn(window, 'confirm');
 
 describe('ChatInterface', () => {
   const mockModels: ModelInfo[] = [
@@ -27,6 +30,14 @@ describe('ChatInterface', () => {
       updated_at: '2026-01-01T00:00:00Z',
       message_count: 2,
       last_message_preview: 'hello',
+    },
+    {
+      id: 'conv-2',
+      title: '別会話',
+      created_at: '2026-01-01T01:00:00Z',
+      updated_at: '2026-01-01T01:00:00Z',
+      message_count: 1,
+      last_message_preview: 'world',
     },
   ];
 
@@ -47,12 +58,18 @@ describe('ChatInterface', () => {
     vi.mocked(chatService.getModels).mockResolvedValue(mockModels);
     vi.mocked(chatService.getConversations).mockResolvedValue(mockConversations);
     vi.mocked(chatService.getConversationMessages).mockResolvedValue(mockMessages);
+    vi.mocked(chatService.deleteConversation).mockResolvedValue();
     vi.mocked(chatService.createConversation).mockResolvedValue({
       id: 'conv-new',
       title: '新しいチャット',
       created_at: '2026-01-01T00:00:00Z',
       updated_at: '2026-01-01T00:00:00Z',
     });
+    confirmSpy.mockReturnValue(true);
+  });
+
+  afterAll(() => {
+    confirmSpy.mockRestore();
   });
 
   it('初期表示時にモデルと会話一覧を取得する', async () => {
@@ -110,5 +127,50 @@ describe('ChatInterface', () => {
 
     const call = vi.mocked(chatService.sendMessage).mock.calls[0];
     expect(call[3]).toBe('conv-1');
+  });
+
+  it('履歴削除ボタン押下で会話削除APIを呼ぶ', async () => {
+    render(<ChatInterface />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'テスト会話を削除' })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'テスト会話を削除' }));
+
+    await waitFor(() => {
+      expect(chatService.deleteConversation).toHaveBeenCalledWith('conv-1');
+    });
+  });
+
+  it('アクティブ会話削除後に新規会話を作成する', async () => {
+    render(<ChatInterface />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'テスト会話を削除' })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'テスト会話を削除' }));
+
+    await waitFor(() => {
+      expect(chatService.createConversation).toHaveBeenCalled();
+    });
+  });
+
+  it('非アクティブ会話削除時はアクティブ会話を維持する', async () => {
+    render(<ChatInterface />);
+
+    await waitFor(() => {
+      expect(window.location.pathname).toContain('/chat/conv-1');
+      expect(screen.getByRole('button', { name: '別会話を削除' })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: '別会話を削除' }));
+
+    await waitFor(() => {
+      expect(chatService.deleteConversation).toHaveBeenCalledWith('conv-2');
+      expect(chatService.createConversation).not.toHaveBeenCalled();
+      expect(window.location.pathname).toContain('/chat/conv-1');
+    });
   });
 });

@@ -1,7 +1,7 @@
 /**
  * 統合テスト - 会話履歴込みのチャットフロー
  */
-import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, afterAll, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
@@ -10,7 +10,13 @@ import { ChatInterface } from '../../src/components/ChatInterface';
 const server = setupServer();
 
 beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
+beforeEach(() => {
+  window.history.replaceState({}, '', '/');
+});
+afterEach(() => {
+  server.resetHandlers();
+  vi.restoreAllMocks();
+});
 afterAll(() => server.close());
 
 describe('Chat Integration Tests', () => {
@@ -142,6 +148,69 @@ describe('Chat Integration Tests', () => {
 
     await waitFor(() => {
       expect(window.location.pathname).toContain('/chat/conv-2');
+    });
+  });
+
+  it('表示中会話の削除後は新規会話に遷移する', async () => {
+    server.use(
+      http.get('http://localhost:8000/api/models', () =>
+        HttpResponse.json([
+          {
+            id: 'gpt-5.2',
+            name: 'GPT-5.2',
+            provider: 'openai',
+            description: 'OpenAIの最新モデル',
+          },
+        ])
+      ),
+      http.get('http://localhost:8000/api/conversations', () =>
+        HttpResponse.json([
+          {
+            id: 'conv-1',
+            title: '会話1',
+            created_at: '2026-01-01T00:00:00Z',
+            updated_at: '2026-01-01T00:00:00Z',
+            message_count: 1,
+            last_message_preview: 'first',
+          },
+        ])
+      ),
+      http.get('http://localhost:8000/api/conversations/conv-1/messages', () =>
+        HttpResponse.json([
+          {
+            id: 1,
+            conversation_id: 'conv-1',
+            role: 'user',
+            content: 'first',
+            model: 'gpt-5.2',
+            timestamp: '2026-01-01T00:00:00Z',
+          },
+        ])
+      ),
+      http.delete('http://localhost:8000/api/conversations/conv-1', () => new HttpResponse(null, { status: 204 })),
+      http.post('http://localhost:8000/api/conversations', () =>
+        HttpResponse.json({
+          id: 'conv-new',
+          title: '新しいチャット',
+          created_at: '2026-01-01T02:00:00Z',
+          updated_at: '2026-01-01T02:00:00Z',
+        })
+      ),
+      http.get('http://localhost:8000/api/conversations/conv-new/messages', () => HttpResponse.json([]))
+    );
+
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    render(<ChatInterface />);
+
+    await waitFor(() => {
+      expect(window.location.pathname).toContain('/chat/conv-1');
+      expect(screen.getByRole('button', { name: '会話1を削除' })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: '会話1を削除' }));
+
+    await waitFor(() => {
+      expect(window.location.pathname).toContain('/chat/conv-new');
     });
   });
 });

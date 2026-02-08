@@ -27,3 +27,25 @@ def test_get_conversation_summaries_order_desc():
 
     assert summaries[0]['id'] == 'conv-2'
     assert summaries[1]['id'] == 'conv-1'
+
+
+def test_delete_conversation_removes_messages():
+    repo = MessageRepository(db_url='sqlite:///:memory:')
+
+    repo.create_conversation('会話1', 'conv-1')
+    repo.save_message('user', 'first', 'gpt-5.2', 'conv-1')
+    repo.save_message('assistant', 'reply', 'gpt-5.2', 'conv-1')
+
+    deleted = repo.delete_conversation('conv-1')
+
+    assert deleted is True
+    assert repo.get_conversation('conv-1') is None
+    assert repo.get_messages_by_conversation('conv-1') == []
+
+
+def test_delete_conversation_returns_false_when_not_found():
+    repo = MessageRepository(db_url='sqlite:///:memory:')
+
+    deleted = repo.delete_conversation('missing')
+
+    assert deleted is False

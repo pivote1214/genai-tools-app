@@ -71,3 +71,24 @@ def test_get_conversation_messages(client):
         payload = response.json()
         assert len(payload) == 1
         assert payload[0]['conversation_id'] == 'conv-1'
+
+
+def test_delete_conversation_success(client):
+    with patch('main.message_repository') as mock_repo:
+        mock_repo.delete_conversation.return_value = True
+
+        response = client.delete('/api/conversations/conv-1')
+
+        assert response.status_code == 204
+        mock_repo.delete_conversation.assert_called_once_with('conv-1')
+
+
+def test_delete_conversation_not_found(client):
+    with patch('main.message_repository') as mock_repo:
+        mock_repo.delete_conversation.return_value = False
+
+        response = client.delete('/api/conversations/not-found')
+
+        assert response.status_code == 404
+        payload = response.json()
+        assert payload['detail'] == '会話が見つかりません'

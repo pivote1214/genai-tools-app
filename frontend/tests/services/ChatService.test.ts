@@ -147,5 +147,23 @@ describe('ChatService', () => {
 
       expect(result.id).toBe('conv-new');
     });
+
+    it('会話を削除する', async () => {
+      server.use(
+        http.delete(`${API_BASE_URL}/api/conversations/conv-1`, () => new HttpResponse(null, { status: 204 }))
+      );
+
+      const chatService = new ChatService(API_BASE_URL);
+      await expect(chatService.deleteConversation('conv-1')).resolves.toBeUndefined();
+    });
+
+    it('会話削除で非2xxの場合はエラーにする', async () => {
+      server.use(
+        http.delete(`${API_BASE_URL}/api/conversations/conv-1`, () => HttpResponse.json({}, { status: 404 }))
+      );
+
+      const chatService = new ChatService(API_BASE_URL);
+      await expect(chatService.deleteConversation('conv-1')).rejects.toThrow('HTTP error! status: 404');
+    });
   });
 });
