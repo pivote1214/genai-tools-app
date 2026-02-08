@@ -15,8 +15,10 @@ from app.repositories.message_repository import MessageRepository
 
 # 利用可能なモデルのリスト
 AVAILABLE_MODELS = [
-    'gpt-4o',
-    'gpt-4o-mini',
+    'gpt-5.2',
+    'gpt-5.2-pro',
+    'gemini-3-pro-preview',
+    'gemini-3-flash-preview',
     'claude-opus-4-5',
     'claude-sonnet-4-5',
     'claude-haiku-4-5'

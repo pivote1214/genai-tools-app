@@ -9,14 +9,14 @@ describe('MessageList', () => {
       id: '1',
       role: 'user',
       content: 'Hello',
-      model: 'gpt-4o',
+      model: 'gpt-5.2',
       timestamp: new Date('2024-01-01T10:00:00'),
     },
     {
       id: '2',
       role: 'assistant',
       content: 'Hi there!',
-      model: 'gpt-4o',
+      model: 'gpt-5.2',
       timestamp: new Date('2024-01-01T10:00:05'),
     },
   ];
@@ -44,8 +44,25 @@ describe('MessageList', () => {
 
   it('使用されたモデル名が表示される', () => {
     render(<MessageList messages={mockMessages} />);
-    const modelLabels = screen.getAllByText('gpt-4o');
+    const modelLabels = screen.getAllByText('GPT-5.2');
     expect(modelLabels).toHaveLength(2);
+  });
+
+  it('Gemini previewモデルIDはPreviewなしの表示名で表示される', () => {
+    render(
+      <MessageList
+        messages={[
+          {
+            id: '3',
+            role: 'assistant',
+            content: 'Gemini reply',
+            model: 'gemini-3-pro-preview',
+            timestamp: new Date('2024-01-01T10:00:10'),
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByText('Gemini 3 Pro')).toBeInTheDocument();
   });
 
   it('空のメッセージリストが正しく表示される', () => {

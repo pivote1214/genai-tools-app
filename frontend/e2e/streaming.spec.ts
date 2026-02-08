@@ -21,7 +21,7 @@ test.describe('ストリーミングレスポンス', () => {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify([
-          { id: 'gpt-4o', name: 'GPT-4o', provider: 'openai', description: 'Test model' }
+          { id: 'gpt-5.2', name: 'GPT-5.2', provider: 'openai', description: 'Test model' }
         ]),
       });
     });
@@ -61,7 +61,7 @@ test.describe('ストリーミングレスポンス', () => {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify([
-          { id: 'gpt-4o', name: 'GPT-4o', provider: 'openai', description: 'Test model' }
+          { id: 'gpt-5.2', name: 'GPT-5.2', provider: 'openai', description: 'Test model' }
         ]),
       });
     });
@@ -98,7 +98,7 @@ test.describe('ストリーミングレスポンス', () => {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify([
-          { id: 'gpt-4o', name: 'GPT-4o', provider: 'openai', description: 'Test model' }
+          { id: 'gpt-5.2', name: 'GPT-5.2', provider: 'openai', description: 'Test model' }
         ]),
       });
     });

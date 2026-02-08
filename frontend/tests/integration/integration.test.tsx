@@ -19,8 +19,8 @@ describe('Chat Integration Tests', () => {
       http.get('http://localhost:8000/api/models', () =>
         HttpResponse.json([
           {
-            id: 'gpt-4o',
-            name: 'GPT-4o',
+            id: 'gpt-5.2',
+            name: 'GPT-5.2',
             provider: 'openai',
             description: 'OpenAIの最新モデル',
           },
@@ -75,8 +75,8 @@ describe('Chat Integration Tests', () => {
       http.get('http://localhost:8000/api/models', () =>
         HttpResponse.json([
           {
-            id: 'gpt-4o',
-            name: 'GPT-4o',
+            id: 'gpt-5.2',
+            name: 'GPT-5.2',
             provider: 'openai',
             description: 'OpenAIの最新モデル',
           },
@@ -109,7 +109,7 @@ describe('Chat Integration Tests', () => {
             conversation_id: 'conv-1',
             role: 'user',
             content: 'first',
-            model: 'gpt-4o',
+            model: 'gpt-5.2',
             timestamp: '2026-01-01T00:00:00Z',
           },
         ])
@@ -121,7 +121,7 @@ describe('Chat Integration Tests', () => {
             conversation_id: 'conv-2',
             role: 'assistant',
             content: 'second',
-            model: 'gpt-4o',
+            model: 'gpt-5.2',
             timestamp: '2026-01-01T01:00:00Z',
           },
         ])

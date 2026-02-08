@@ -29,7 +29,7 @@ def test_save_message_logs_error_on_database_failure():
         with patch('app.repositories.message_repository.logger') as mock_logger:
             # エラーが発生することを確認
             with pytest.raises(SQLAlchemyError):
-                repo.save_message("user", "test message", "gpt-4o")
+                repo.save_message("user", "test message", "gpt-5.2")
             
             # エラーログが記録されたことを確認
             mock_logger.error.assert_called_once()
@@ -51,7 +51,7 @@ def test_save_message_rolls_back_on_error():
     with patch.object(repo, 'SessionLocal', return_value=mock_session):
         # エラーが発生することを確認
         with pytest.raises(SQLAlchemyError):
-            repo.save_message("user", "test message", "gpt-4o")
+            repo.save_message("user", "test message", "gpt-5.2")
         
         # ロールバックが呼ばれたことを確認
         mock_session.rollback.assert_called_once()
@@ -71,7 +71,7 @@ def test_save_message_closes_session_on_error():
     with patch.object(repo, 'SessionLocal', return_value=mock_session):
         # エラーが発生することを確認
         with pytest.raises(SQLAlchemyError):
-            repo.save_message("user", "test message", "gpt-4o")
+            repo.save_message("user", "test message", "gpt-5.2")
         
         # セッションがクローズされたことを確認
         mock_session.close.assert_called_once()
@@ -111,7 +111,7 @@ def test_database_error_does_not_prevent_application_continuation():
     repo = MessageRepository(db_url="sqlite:///:memory:")
     
     # 最初のメッセージを正常に保存
-    message1 = repo.save_message("user", "first message", "gpt-4o")
+    message1 = repo.save_message("user", "first message", "gpt-5.2")
     assert message1.id is not None
     
     # 2番目のメッセージでエラーをシミュレート
@@ -121,11 +121,11 @@ def test_database_error_does_not_prevent_application_continuation():
     with patch.object(repo, 'SessionLocal', return_value=mock_session):
         # エラーが発生することを確認
         with pytest.raises(SQLAlchemyError):
-            repo.save_message("user", "second message", "gpt-4o")
+            repo.save_message("user", "second message", "gpt-5.2")
     
     # エラー後も、新しいリポジトリインスタンスで操作を継続できることを確認
     # （実際のアプリケーションでは、エラーをキャッチして継続する）
-    message3 = repo.save_message("user", "third message", "gpt-4o")
+    message3 = repo.save_message("user", "third message", "gpt-5.2")
     assert message3.id is not None
     
     # 最初と3番目のメッセージが保存されていることを確認

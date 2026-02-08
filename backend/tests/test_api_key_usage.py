@@ -5,11 +5,12 @@ APIキー使用のユニットテスト
 
 検証: 要件 5.3
 """
-import pytest
 import os
-from unittest.mock import AsyncMock, patch, MagicMock
+import pytest
+from unittest.mock import patch
 from app.services.openai_provider import OpenAIProvider
 from app.services.claude_provider import ClaudeProvider
+from app.services.google_provider import GoogleProvider
 
 
 def test_openai_provider_requires_api_key():
@@ -64,5 +65,34 @@ def test_claude_provider_uses_env_api_key():
     with patch.dict(os.environ, {'ANTHROPIC_API_KEY': test_key}):
         provider = ClaudeProvider()
         
+        assert provider.api_key == test_key
+        assert provider.client.api_key == test_key
+
+
+def test_google_provider_requires_api_key():
+    """GoogleProviderがAPIキーを要求すること"""
+    with patch.dict(os.environ, {}, clear=True):
+        with pytest.raises(ValueError, match="GEMINI_API_KEY or GOOGLE_API_KEY is not set"):
+            GoogleProvider()
+
+
+def test_google_provider_uses_gemini_api_key():
+    """GoogleProviderがGEMINI_API_KEYを優先して使用すること"""
+    test_key = "env-gemini-key"
+
+    with patch.dict(os.environ, {'GEMINI_API_KEY': test_key}, clear=True):
+        provider = GoogleProvider()
+
+        assert provider.api_key == test_key
+        assert provider.client.api_key == test_key
+
+
+def test_google_provider_fallbacks_to_google_api_key():
+    """GoogleProviderがGOOGLE_API_KEYをフォールバック使用すること"""
+    test_key = "env-google-key"
+
+    with patch.dict(os.environ, {'GOOGLE_API_KEY': test_key}, clear=True):
+        provider = GoogleProvider()
+
         assert provider.api_key == test_key
         assert provider.client.api_key == test_key

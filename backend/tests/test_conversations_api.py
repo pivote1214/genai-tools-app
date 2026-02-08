@@ -60,7 +60,7 @@ def test_get_conversation_messages(client):
                 conversation_id='conv-1',
                 role='user',
                 content='hello',
-                model='gpt-4o',
+                model='gpt-5.2',
                 timestamp='2026-01-01T00:00:00',
             )
         ]

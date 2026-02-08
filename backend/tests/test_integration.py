@@ -55,7 +55,7 @@ class TestChatIntegration:
             "/api/chat",
             json={
                 "message": "Hello",
-                "model": "gpt-4o",
+                "model": "gpt-5.2",
                 "conversation_id": "test-conversation",
                 "history": []
             }
@@ -78,13 +78,13 @@ class TestChatIntegration:
         user_call = mock_message_repository.save_message.call_args_list[0]
         assert user_call[0][0] == "user"
         assert user_call[0][1] == "Hello"
-        assert user_call[0][2] == "gpt-4o"
+        assert user_call[0][2] == "gpt-5.2"
         
         # アシスタントメッセージの保存を確認
         assistant_call = mock_message_repository.save_message.call_args_list[1]
         assert assistant_call[0][0] == "assistant"
         assert assistant_call[0][1] == "Hello World!"
-        assert assistant_call[0][2] == "gpt-4o"
+        assert assistant_call[0][2] == "gpt-5.2"
     
     def test_streaming_response_format(self, client, mock_llm_service, mock_message_repository):
         """
@@ -106,7 +106,7 @@ class TestChatIntegration:
             "/api/chat",
             json={
                 "message": "Test",
-                "model": "gpt-4o",
+                "model": "gpt-5.2",
                 "conversation_id": "test-conversation",
                 "history": []
             }
@@ -147,7 +147,7 @@ class TestChatIntegration:
             "/api/chat",
             json={
                 "message": "Test",
-                "model": "gpt-4o",
+                "model": "gpt-5.2",
                 "conversation_id": "test-conversation",
                 "history": []
             }
@@ -174,7 +174,7 @@ class TestChatIntegration:
             "/api/chat",
             json={
                 "message": "Test",
-                "model": "gpt-4o",
+                "model": "gpt-5.2",
                 "conversation_id": "test-conversation",
                 "history": []
             }
@@ -202,7 +202,7 @@ class TestChatIntegration:
             "/api/chat",
             json={
                 "message": "Follow-up question",
-                "model": "gpt-4o",
+                "model": "gpt-5.2",
                 "conversation_id": "test-conversation",
                 "history": [
                     {"role": "user", "content": "First message"},
@@ -249,8 +249,8 @@ class TestModelsEndpoint:
             
             # モデルIDを確認
             model_ids = [model["id"] for model in models]
-            assert "gpt-4o" in model_ids
-            assert "gpt-4o-mini" in model_ids
+            assert "gpt-5.2" in model_ids
+            assert "gpt-5.2-pro" in model_ids
             assert "claude-opus-4-5" in model_ids
             assert "claude-sonnet-4-5" in model_ids
             assert "claude-haiku-4-5" in model_ids
@@ -270,8 +270,49 @@ class TestModelsEndpoint:
             # OpenAIモデルのみが返されることを確認
             assert len(models) == 2
             model_ids = [model["id"] for model in models]
-            assert "gpt-4o" in model_ids
-            assert "gpt-4o-mini" in model_ids
+            assert "gpt-5.2" in model_ids
+            assert "gpt-5.2-pro" in model_ids
+
+    def test_get_models_google_only(self, client):
+        """
+        Gemini APIキーのみが設定されている場合のモデルリスト取得を検証
+        """
+        with patch.dict('os.environ', {
+            'GEMINI_API_KEY': 'test-gemini-key'
+        }, clear=True):
+            response = client.get("/api/models")
+
+            assert response.status_code == 200
+            models = response.json()
+
+            assert len(models) == 2
+            model_ids = [model["id"] for model in models]
+            assert "gemini-3-pro-preview" in model_ids
+            assert "gemini-3-flash-preview" in model_ids
+
+    def test_get_models_with_all_provider_keys(self, client):
+        """
+        全プロバイダーのAPIキーが設定されている場合のモデルリスト取得を検証
+        """
+        with patch.dict('os.environ', {
+            'OPENAI_API_KEY': 'test-openai-key',
+            'ANTHROPIC_API_KEY': 'test-anthropic-key',
+            'GEMINI_API_KEY': 'test-gemini-key'
+        }, clear=True):
+            response = client.get("/api/models")
+
+            assert response.status_code == 200
+            models = response.json()
+
+            assert len(models) == 7
+            model_ids = [model["id"] for model in models]
+            assert "gpt-5.2" in model_ids
+            assert "gpt-5.2-pro" in model_ids
+            assert "gemini-3-pro-preview" in model_ids
+            assert "gemini-3-flash-preview" in model_ids
+            assert "claude-opus-4-5" in model_ids
+            assert "claude-sonnet-4-5" in model_ids
+            assert "claude-haiku-4-5" in model_ids
 
 
 class TestDatabaseIntegration:
@@ -297,7 +338,7 @@ class TestDatabaseIntegration:
             "/api/chat",
             json={
                 "message": "Test message",
-                "model": "gpt-4o",
+                "model": "gpt-5.2",
                 "conversation_id": "test-conversation",
                 "history": []
             }
@@ -312,10 +353,10 @@ class TestDatabaseIntegration:
         user_call = mock_message_repository.save_message.call_args_list[0]
         assert user_call[0][0] == "user"
         assert user_call[0][1] == "Test message"
-        assert user_call[0][2] == "gpt-4o"
+        assert user_call[0][2] == "gpt-5.2"
         
         # アシスタントメッセージの保存を確認
         assistant_call = mock_message_repository.save_message.call_args_list[1]
         assert assistant_call[0][0] == "assistant"
         assert assistant_call[0][1] == "Test response"
-        assert assistant_call[0][2] == "gpt-4o"
+        assert assistant_call[0][2] == "gpt-5.2"

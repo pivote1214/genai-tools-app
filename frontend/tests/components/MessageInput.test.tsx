@@ -5,14 +5,14 @@ import type { ModelInfo } from '../../src/types';
 
 describe('MessageInput', () => {
   const mockModels: ModelInfo[] = [
-    { id: 'gpt-4o', name: 'GPT-4o', provider: 'openai', description: 'Test model' },
+    { id: 'gpt-5.2', name: 'GPT-5.2', provider: 'openai', description: 'Test model' },
     { id: 'claude-opus-4-5', name: 'Claude Opus 4.5', provider: 'claude', description: 'Test model' },
     { id: 'claude-sonnet-4-5', name: 'Claude Sonnet 4.5', provider: 'claude', description: 'Test model' },
   ];
 
   const defaultProps = {
     value: '',
-    selectedModel: 'gpt-4o',
+    selectedModel: 'gpt-5.2',
     availableModels: mockModels,
     isLoading: false,
     onSend: vi.fn(),
@@ -106,7 +106,7 @@ describe('MessageInput', () => {
 
   it('利用可能なモデルが全て表示される', () => {
     render(<MessageInput {...defaultProps} />);
-    expect(screen.getByText('GPT-4o')).toBeInTheDocument();
+    expect(screen.getByText('GPT-5.2')).toBeInTheDocument();
     expect(screen.getByText('Claude Sonnet 4.5')).toBeInTheDocument();
   });
 

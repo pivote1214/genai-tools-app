@@ -53,7 +53,7 @@ def test_sse_connection_established(client, mock_llm_service, mock_message_repos
         "/api/chat",
         json={
             "message": "Hello",
-            "model": "gpt-4o",
+            "model": "gpt-5.2",
             "conversation_id": "test-conversation",
             "history": []
         }
@@ -75,7 +75,7 @@ def test_sse_streaming_response(client, mock_llm_service, mock_message_repositor
         "/api/chat",
         json={
             "message": "Test message",
-            "model": "gpt-4o",
+            "model": "gpt-5.2",
             "conversation_id": "test-conversation",
             "history": []
         }
@@ -103,7 +103,7 @@ def test_sse_connection_close_on_completion(client, mock_llm_service, mock_messa
         "/api/chat",
         json={
             "message": "Test",
-            "model": "gpt-4o",
+            "model": "gpt-5.2",
             "conversation_id": "test-conversation",
             "history": []
         }
