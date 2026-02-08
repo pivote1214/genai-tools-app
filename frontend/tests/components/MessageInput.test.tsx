@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MessageInput } from '../../src/components/MessageInput';
-import { ModelInfo } from '../../src/types';
+import type { ModelInfo } from '../../src/types';
 
 describe('MessageInput', () => {
   const mockModels: ModelInfo[] = [

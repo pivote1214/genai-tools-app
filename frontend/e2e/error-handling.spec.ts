@@ -30,7 +30,8 @@ test.describe('エラーハンドリング', () => {
     await expect(page.locator('.error-banner')).toBeVisible();
     await expect(page.locator('.error-message')).toContainText(/ネットワーク|エラー|失敗/);
 
-    // 送信ボタンが再び有効化される（再試行可能）
+    // 再度テキストを入力すると送信ボタンが有効化される（再試行可能）
+    await page.locator('.message-textarea').fill('再試行メッセージ');
     await expect(page.locator('.send-button')).toBeEnabled();
   });
 
@@ -52,7 +53,8 @@ test.describe('エラーハンドリング', () => {
     await expect(page.locator('.error-banner')).toBeVisible();
     await expect(page.locator('.error-message')).toBeVisible();
 
-    // 送信ボタンが再び有効化される
+    // 再度テキストを入力すると送信ボタンが有効化される
+    await page.locator('.message-textarea').fill('再試行メッセージ');
     await expect(page.locator('.send-button')).toBeEnabled();
   });
 

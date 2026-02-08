@@ -78,6 +78,9 @@ test.describe('ストリーミングレスポンス', () => {
 
     // ストリーミング完了後、ローディングが解除される
     await expect(page.locator('.loading-indicator')).not.toBeVisible();
+    
+    // 再度テキストを入力すると送信ボタンが有効化される
+    await page.locator('.message-textarea').fill('次のメッセージ');
     await expect(page.locator('.send-button')).toBeEnabled();
   });
 
@@ -104,10 +107,10 @@ test.describe('ストリーミングレスポンス', () => {
     await page.locator('.message-textarea').fill('最初のメッセージ');
     await page.locator('.send-button').click();
 
-    // ストリーミング完了を待つ
-    await expect(page.locator('.send-button')).toBeEnabled();
+    // ストリーミング完了を待つ（ローディングインジケーターが消える）
+    await expect(page.locator('.loading-indicator')).not.toBeVisible();
 
-    // 2番目のメッセージを送信できる
+    // 2番目のメッセージを入力して送信できる
     await page.locator('.message-textarea').fill('2番目のメッセージ');
     await expect(page.locator('.send-button')).toBeEnabled();
     await page.locator('.send-button').click();

@@ -1,4 +1,4 @@
-import { ModelInfo } from '../types';
+import type { ModelInfo } from '../types';
 import './MessageInput.css';
 
 interface MessageInputProps {

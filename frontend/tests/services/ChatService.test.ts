@@ -7,7 +7,7 @@ import { describe, it, expect, beforeAll, afterAll, afterEach, vi } from 'vitest
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { ChatService } from '../../src/services/ChatService';
-import { ModelInfo } from '../../src/types';
+import type { ModelInfo } from '../../src/types';
 
 const API_BASE_URL = 'http://localhost:8000';
 

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ChatInterface } from '../../src/components/ChatInterface';
 import { chatService } from '../../src/services/ChatService';
-import { ModelInfo } from '../../src/types';
+import type { ModelInfo } from '../../src/types';
 
 vi.mock('../../src/services/ChatService', () => ({
   chatService: {

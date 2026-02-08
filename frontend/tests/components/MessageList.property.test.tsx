@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { MessageList } from '../../src/components/MessageList';
-import { Message } from '../../src/types';
+import type { Message } from '../../src/types';
 import * as fc from 'fast-check';
 
 /**

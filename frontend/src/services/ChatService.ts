@@ -2,7 +2,7 @@
  * ChatService - バックエンドAPIとの通信を担当するサービスクラス
  */
 
-import { ModelInfo } from '../types';
+import type { ModelInfo } from '../types';
 
 /**
  * APIのベースURL（環境変数から取得、デフォルトはlocalhost）

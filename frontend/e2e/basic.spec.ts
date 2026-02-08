@@ -43,13 +43,16 @@ test.describe('基本的なチャットインターフェース', () => {
     // モデル選択ドロップダウンが表示される
     await expect(modelSelector).toBeVisible();
 
+    // モデルが読み込まれるまで待つ
+    await expect(modelSelector.locator('option')).not.toHaveCount(0);
+
     // 利用可能なモデルが表示される
     const options = await modelSelector.locator('option').all();
     expect(options.length).toBeGreaterThan(0);
 
     // モデルを選択できる
-    const firstOption = await modelSelector.locator('option').first().textContent();
     await modelSelector.selectOption({ index: 0 });
-    await expect(modelSelector).toHaveValue(await modelSelector.locator('option').first().getAttribute('value') || '');
+    const firstOptionValue = await modelSelector.locator('option').first().getAttribute('value');
+    await expect(modelSelector).toHaveValue(firstOptionValue || '');
   });
 });
