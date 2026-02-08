@@ -20,17 +20,25 @@ export function MessageInput({
   onChange,
   onModelChange,
 }: MessageInputProps) {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitMessage = () => {
     if (value.trim() && !isLoading) {
       onSend(value);
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submitMessage();
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
+
+    if (e.key === 'Enter' && e.metaKey) {
       e.preventDefault();
-      handleSubmit(e);
+      submitMessage();
     }
   };
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, createEvent } from '@testing-library/react';
 import { MessageInput } from '../../src/components/MessageInput';
 import type { ModelInfo } from '../../src/types';
 
@@ -51,11 +51,19 @@ describe('MessageInput', () => {
     expect(onSend).toHaveBeenCalledWith('Hello');
   });
 
-  it('Enterキー押下時にonSendが呼ばれる', () => {
+  it('Enterキー単独押下時にonSendが呼ばれない', () => {
     const onSend = vi.fn();
     render(<MessageInput {...defaultProps} value="Hello" onSend={onSend} />);
     const textarea = screen.getByPlaceholderText('メッセージを入力...');
-    fireEvent.keyDown(textarea, { key: 'Enter', shiftKey: false });
+    fireEvent.keyDown(textarea, { key: 'Enter' });
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it('Cmd+Enterキー押下時にonSendが呼ばれる', () => {
+    const onSend = vi.fn();
+    render(<MessageInput {...defaultProps} value="Hello" onSend={onSend} />);
+    const textarea = screen.getByPlaceholderText('メッセージを入力...');
+    fireEvent.keyDown(textarea, { key: 'Enter', metaKey: true });
     expect(onSend).toHaveBeenCalledWith('Hello');
   });
 
@@ -64,6 +72,27 @@ describe('MessageInput', () => {
     render(<MessageInput {...defaultProps} value="Hello" onSend={onSend} />);
     const textarea = screen.getByPlaceholderText('メッセージを入力...');
     fireEvent.keyDown(textarea, { key: 'Enter', shiftKey: true });
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it('Ctrl+Enterキー押下時にonSendが呼ばれない', () => {
+    const onSend = vi.fn();
+    render(<MessageInput {...defaultProps} value="Hello" onSend={onSend} />);
+    const textarea = screen.getByPlaceholderText('メッセージを入力...');
+    fireEvent.keyDown(textarea, { key: 'Enter', ctrlKey: true });
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it('IME変換中のCmd+Enterキー押下時にonSendが呼ばれない', () => {
+    const onSend = vi.fn();
+    render(<MessageInput {...defaultProps} value="Hello" onSend={onSend} />);
+    const textarea = screen.getByPlaceholderText('メッセージを入力...');
+    const keyDownEvent = createEvent.keyDown(textarea, {
+      key: 'Enter',
+      metaKey: true,
+    });
+    Object.defineProperty(keyDownEvent, 'isComposing', { value: true });
+    fireEvent(textarea, keyDownEvent);
     expect(onSend).not.toHaveBeenCalled();
   });
 
