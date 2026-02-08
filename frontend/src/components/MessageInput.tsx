@@ -44,11 +44,11 @@ export function MessageInput({
   return (
     <form className="message-input glass-panel noise-overlay m-3 rounded-2xl border-ink-700/80 p-3 md:m-5 md:p-4" onSubmit={handleSubmit}>
       <div className="input-controls mb-3 flex items-center justify-between gap-3">
-        <label className="text-[11px] font-semibold tracking-[0.14em] text-ink-100/70" htmlFor="model-selector">
+        <label className="text-[11px] font-semibold tracking-[0.14em] text-ink-100" htmlFor="model-selector">
           MODEL
         </label>
         <select
-          className="model-selector w-full max-w-[320px] rounded-lg border border-ink-700 bg-ink-900/80 px-3 py-2 text-sm text-ink-50 transition focus:border-signal-400/80 focus:outline-none focus:ring-2 focus:ring-signal-500/30 disabled:cursor-not-allowed disabled:opacity-60"
+          className="model-selector w-full max-w-[320px] rounded-lg border border-ink-700 bg-ink-900 px-3 py-2 text-sm text-ink-50 transition focus:border-signal-400 focus:outline-none focus:ring-2 focus:ring-signal-500/30 disabled:cursor-not-allowed disabled:opacity-60"
           id="model-selector"
           value={selectedModel}
           onChange={(e) => onModelChange(e.target.value)}
@@ -63,7 +63,7 @@ export function MessageInput({
       </div>
       <div className="input-row flex items-end gap-2 md:gap-3">
         <textarea
-          className="message-textarea min-h-[92px] flex-1 resize-y rounded-xl border border-ink-700 bg-ink-900/80 p-3 text-sm leading-relaxed text-ink-50 shadow-inner shadow-ink-950/45 transition placeholder:text-ink-100/45 focus:border-accent-500/80 focus:outline-none focus:ring-2 focus:ring-accent-500/30 disabled:cursor-not-allowed disabled:opacity-60"
+          className="message-textarea min-h-[92px] flex-1 resize-y rounded-xl border border-ink-700 bg-ink-900 p-3 text-sm leading-relaxed text-ink-50 shadow-inner shadow-ink-950/45 transition placeholder:text-ink-100/70 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/30 disabled:cursor-not-allowed disabled:opacity-60"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
