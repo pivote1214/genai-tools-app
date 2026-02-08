@@ -3,6 +3,7 @@ from typing import AsyncIterator, List, Dict
 from .llm_provider import LLMProvider
 from .openai_provider import OpenAIProvider
 from .claude_provider import ClaudeProvider
+from .google_provider import GoogleProvider
 
 
 class LLMService:
@@ -20,11 +21,17 @@ class LLMService:
         # Claudeプロバイダーの初期化（APIキーがある場合のみ）
         if os.getenv('ANTHROPIC_API_KEY'):
             self.providers['claude'] = ClaudeProvider()
+
+        # Googleプロバイダーの初期化（APIキーがある場合のみ）
+        if os.getenv('GEMINI_API_KEY') or os.getenv('GOOGLE_API_KEY'):
+            self.providers['google'] = GoogleProvider()
         
         # モデル名からプロバイダーへのマッピング
         self.model_mapping = {
-            'gpt-4o': 'openai',
-            'gpt-4o-mini': 'openai',
+            'gpt-5.2': 'openai',
+            'gpt-5.2-pro': 'openai',
+            'gemini-3-pro-preview': 'google',
+            'gemini-3-flash-preview': 'google',
             'claude-opus-4-5': 'claude',
             'claude-sonnet-4-5': 'claude',
             'claude-haiku-4-5': 'claude'

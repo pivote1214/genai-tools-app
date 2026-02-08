@@ -34,12 +34,22 @@ class OpenAIProvider(LLMProvider):
         Yields:
             生成されたテキストのチャンク
         """
-        stream = await self.client.chat.completions.create(
+        input_messages = [
+            {
+                "type": "message",
+                "role": msg["role"],
+                "content": msg["content"],
+            }
+            for msg in messages
+            if msg.get("role") in ("user", "assistant", "system", "developer")
+        ]
+
+        async with self.client.responses.stream(
             model=model,
-            messages=messages,
-            stream=True
-        )
-        
-        async for chunk in stream:
-            if chunk.choices[0].delta.content:
-                yield chunk.choices[0].delta.content
+            input=input_messages,
+        ) as stream:
+            async for event in stream:
+                if event.type == "response.output_text.delta":
+                    yield event.delta
+                elif event.type == "error":
+                    raise RuntimeError(event.message)
