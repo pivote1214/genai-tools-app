@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { Message } from '../types'
+import { getModelDisplayName } from '../constants/modelDisplay'
 
 interface MessageListProps {
   messages: Message[]
@@ -31,7 +32,7 @@ export function MessageList({ messages }: MessageListProps) {
                 {isUser ? 'あなた' : 'アシスタント'}
               </span>
               <span className="message-model rounded-full border border-current/25 px-2 py-0.5 font-mono text-[11px] opacity-80">
-                {message.model}
+                {getModelDisplayName(message.model)}
               </span>
             </div>
             <div className="message-content whitespace-pre-wrap break-words text-sm leading-relaxed md:text-[15px]">

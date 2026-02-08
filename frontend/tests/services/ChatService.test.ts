@@ -46,7 +46,7 @@ describe('ChatService', () => {
       const onComplete = vi.fn();
       const onError = vi.fn();
 
-      await chatService.sendMessage('Test message', 'gpt-4o', [], 'conv-1', onChunk, onComplete, onError);
+      await chatService.sendMessage('Test message', 'gpt-5.2', [], 'conv-1', onChunk, onComplete, onError);
 
       expect(onChunk).toHaveBeenCalledTimes(2);
       expect(onComplete).toHaveBeenCalledTimes(1);
@@ -74,12 +74,12 @@ describe('ChatService', () => {
       const chatService = new ChatService(API_BASE_URL);
       const history = [{ role: 'user', content: 'Previous message' }];
 
-      await chatService.sendMessage('New message', 'gpt-4o', history, 'conv-1', vi.fn(), vi.fn(), vi.fn());
+      await chatService.sendMessage('New message', 'gpt-5.2', history, 'conv-1', vi.fn(), vi.fn(), vi.fn());
 
       expect(requestBody).toEqual({
         conversation_id: 'conv-1',
         message: 'New message',
-        model: 'gpt-4o',
+        model: 'gpt-5.2',
         history,
       });
     });
@@ -89,8 +89,8 @@ describe('ChatService', () => {
     it('モデル一覧を取得する', async () => {
       const mockModels: ModelInfo[] = [
         {
-          id: 'gpt-4o',
-          name: 'GPT-4o',
+          id: 'gpt-5.2',
+          name: 'GPT-5.2',
           provider: 'openai',
           description: 'OpenAI model',
         },

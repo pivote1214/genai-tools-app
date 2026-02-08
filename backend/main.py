@@ -55,7 +55,7 @@ class ModelInfo(BaseModel):
 
     id: str
     name: str
-    provider: Literal["openai", "claude"]
+    provider: Literal["openai", "claude", "google"]
     description: str
 
 
@@ -117,6 +117,7 @@ async def startup_event():
     # APIキーの検証
     openai_key = os.getenv("OPENAI_API_KEY")
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    google_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
     if not openai_key:
         logger.warning("OPENAI_API_KEY is not set. OpenAI models will not be available.")
@@ -128,9 +129,14 @@ async def startup_event():
     else:
         logger.info("ANTHROPIC_API_KEY is configured")
 
-    if not openai_key and not anthropic_key:
+    if not google_key:
+        logger.warning("GEMINI_API_KEY / GOOGLE_API_KEY is not set. Gemini models will not be available.")
+    else:
+        logger.info("Gemini API key is configured")
+
+    if not openai_key and not anthropic_key and not google_key:
         logger.error(
-            "No API keys configured. At least one API key (OPENAI_API_KEY or ANTHROPIC_API_KEY) must be set."
+            "No API keys configured. At least one API key (OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY or GOOGLE_API_KEY) must be set."
         )
         raise RuntimeError("No API keys configured")
 
@@ -146,6 +152,7 @@ async def get_models():
     """利用可能なLLMモデルのリストを返す"""
     openai_key = os.getenv("OPENAI_API_KEY")
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    google_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
     models = []
 
@@ -153,16 +160,34 @@ async def get_models():
         models.extend(
             [
                 ModelInfo(
-                    id="gpt-4o",
-                    name="GPT-4o",
+                    id="gpt-5.2",
+                    name="GPT-5.2",
                     provider="openai",
                     description="OpenAIの最新モデル",
                 ),
                 ModelInfo(
-                    id="gpt-4o-mini",
-                    name="GPT-4o Mini",
+                    id="gpt-5.2-pro",
+                    name="GPT-5.2 Pro",
                     provider="openai",
-                    description="OpenAIの軽量モデル",
+                    description="OpenAIの高性能モデル",
+                ),
+            ]
+        )
+
+    if google_key:
+        models.extend(
+            [
+                ModelInfo(
+                    id="gemini-3-pro-preview",
+                    name="Gemini 3 Pro",
+                    provider="google",
+                    description="Googleの高性能モデル",
+                ),
+                ModelInfo(
+                    id="gemini-3-flash-preview",
+                    name="Gemini 3 Flash",
+                    provider="google",
+                    description="Googleの高速モデル",
                 ),
             ]
         )

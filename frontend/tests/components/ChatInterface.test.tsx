@@ -16,7 +16,7 @@ vi.mock('../../src/services/ChatService', () => ({
 
 describe('ChatInterface', () => {
   const mockModels: ModelInfo[] = [
-    { id: 'gpt-4o', name: 'GPT-4o', provider: 'openai', description: 'Test model' },
+    { id: 'gpt-5.2', name: 'GPT-5.2', provider: 'openai', description: 'Test model' },
   ];
 
   const mockConversations: ConversationSummary[] = [
@@ -36,7 +36,7 @@ describe('ChatInterface', () => {
       conversation_id: 'conv-1',
       role: 'user',
       content: 'hello',
-      model: 'gpt-4o',
+      model: 'gpt-5.2',
       timestamp: '2026-01-01T00:00:00Z',
     },
   ];

@@ -34,8 +34,10 @@ def mock_message_repository():
 @pytest.mark.parametrize(
     "model",
     [
-        "gpt-4o",
-        "gpt-4o-mini",
+        "gpt-5.2",
+        "gpt-5.2-pro",
+        "gemini-3-pro-preview",
+        "gemini-3-flash-preview",
         "claude-opus-4-5",
         "claude-sonnet-4-5",
         "claude-haiku-4-5",
@@ -66,7 +68,7 @@ def test_chat_routes_selected_model(client, mock_llm_service, mock_message_repos
     assert mock_llm_service.stream_chat.call_args[0][1] == model
 
 
-def test_models_endpoint_returns_new_claude_ids(client):
+def test_models_endpoint_returns_openai_and_claude_ids(client):
     """
     /api/modelsが新しいClaudeモデルIDを返すことを検証
     """
@@ -82,8 +84,28 @@ def test_models_endpoint_returns_new_claude_ids(client):
 
         model_ids = [model["id"] for model in response.json()]
         assert len(model_ids) == 5
-        assert "gpt-4o" in model_ids
-        assert "gpt-4o-mini" in model_ids
+        assert "gpt-5.2" in model_ids
+        assert "gpt-5.2-pro" in model_ids
         assert "claude-opus-4-5" in model_ids
         assert "claude-sonnet-4-5" in model_ids
         assert "claude-haiku-4-5" in model_ids
+
+
+def test_models_endpoint_returns_google_ids_when_key_set(client):
+    """
+    /api/modelsがGoogle APIキー設定時にGeminiモデルIDを返すことを検証
+    """
+    with patch.dict(
+        "os.environ",
+        {
+            "GEMINI_API_KEY": "test-gemini-key",
+        },
+        clear=True,
+    ):
+        response = client.get("/api/models")
+        assert response.status_code == 200
+
+        model_ids = [model["id"] for model in response.json()]
+        assert len(model_ids) == 2
+        assert "gemini-3-pro-preview" in model_ids
+        assert "gemini-3-flash-preview" in model_ids

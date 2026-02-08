@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 const MODELS = [
-  { id: 'gpt-4o', name: 'GPT-4o', provider: 'openai', description: 'Test model' },
-  { id: 'gpt-4o-mini', name: 'GPT-4o Mini', provider: 'openai', description: 'Test model' },
+  { id: 'gpt-5.2', name: 'GPT-5.2', provider: 'openai', description: 'Test model' },
+  { id: 'gpt-5.2-pro', name: 'GPT-5.2 Pro', provider: 'openai', description: 'Test model' },
+  { id: 'gemini-3-pro-preview', name: 'Gemini 3 Pro', provider: 'google', description: 'Test model' },
+  { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash', provider: 'google', description: 'Test model' },
   { id: 'claude-opus-4-5', name: 'Claude Opus 4.5', provider: 'claude', description: 'Test model' },
   { id: 'claude-sonnet-4-5', name: 'Claude Sonnet 4.5', provider: 'claude', description: 'Test model' },
   { id: 'claude-haiku-4-5', name: 'Claude Haiku 4.5', provider: 'claude', description: 'Test model' },

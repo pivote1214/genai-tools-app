@@ -30,7 +30,7 @@ export interface ChatRequest {
 export interface ModelInfo {
   id: string;
   name: string;
-  provider: 'openai' | 'claude';
+  provider: 'openai' | 'claude' | 'google';
   description: string;
 }
 

@@ -1,6 +1,6 @@
 # AI Chat MVP
 
-OpenAIとClaudeの複数のLLMモデルに対応したストリーミングチャット機能を持つWebアプリケーション
+OpenAI / Claude / Google Gemini の複数のLLMモデルに対応したストリーミングチャット機能を持つWebアプリケーション
 
 ## 概要
 
@@ -22,7 +22,7 @@ OpenAIとClaudeの複数のLLMモデルに対応したストリーミングチ�
 
 - **バックエンド**: Python 3.11+、uv (Pythonパッケージマネージャー)
 - **フロントエンド**: Node.js 18+、npm
-- **APIキー**: OpenAI APIキーまたはAnthropic (Claude) APIキー（少なくとも1つ必要）
+- **APIキー**: OpenAI APIキー / Anthropic (Claude) APIキー / Google Gemini APIキー（少なくとも1つ必要）
 
 ### 1. リポジトリのクローン
 
@@ -49,6 +49,11 @@ OPENAI_API_KEY=your_openai_api_key_here
 # Anthropic (Claude) API設定（Claudeモデルを使用する場合）
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
 
+# Google Gemini API設定（Geminiモデルを使用する場合）
+GEMINI_API_KEY=your_gemini_api_key_here
+# 互換: GOOGLE_API_KEYでも可
+# GOOGLE_API_KEY=your_google_api_key_here
+
 # データベース設定（デフォルトのまま使用可能）
 DATABASE_URL=sqlite:///./chat.db
 
@@ -60,9 +65,20 @@ PORT=8000
 FRONTEND_URL=http://localhost:5173
 ```
 
-**重要**: 少なくとも`OPENAI_API_KEY`または`ANTHROPIC_API_KEY`のいずれか1つを設定する必要があります。
+**重要**: 少なくとも`OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `GEMINI_API_KEY`（または`GOOGLE_API_KEY`）のいずれか1つを設定する必要があります。
 
-#### 2.2 依存関係のインストール
+#### 2.2 Google Gemini APIキー取得手順
+
+1. [Google AI Studio](https://aistudio.google.com/apikey) を開く
+2. `Create API key` をクリックしてキーを発行する
+3. `backend/.env` に `GEMINI_API_KEY=...` を設定する（必要に応じて `GOOGLE_API_KEY=...` でも可）
+4. バックエンドを再起動する
+   ```bash
+   uv run uvicorn main:app --reload
+   ```
+5. `GET /api/models` で `gemini-3-pro-preview` と `gemini-3-flash-preview` が返ることを確認する
+
+#### 2.3 依存関係のインストール
 
 ```bash
 uv sync
@@ -131,7 +147,7 @@ cd frontend && npm run dev
 ### バックエンドが起動しない
 
 - **エラー: "No API keys configured"**
-  - `.env`ファイルに少なくとも1つのAPIキー（`OPENAI_API_KEY`または`ANTHROPIC_API_KEY`）が設定されているか確認してください。
+  - `.env`ファイルに少なくとも1つのAPIキー（`OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `GEMINI_API_KEY`または`GOOGLE_API_KEY`）が設定されているか確認してください。
   - APIキーの前後に余分なスペースや引用符がないか確認してください。
 
 - **エラー: "Address already in use"**
