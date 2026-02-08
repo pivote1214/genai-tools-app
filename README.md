@@ -68,17 +68,9 @@ FRONTEND_URL=http://localhost:5173
 uv sync
 ```
 
-#### 2.3 バックエンドサーバーの起動
-
-```bash
-uv run uvicorn main:app --reload
-```
-
-バックエンドAPIは http://localhost:8000 で起動します。
-
 ### 3. フロントエンドのセットアップ
 
-新しいターミナルウィンドウを開いて、以下を実行してください。
+リポジトリルートに戻ってから、以下を実行してください。
 
 #### 3.1 環境変数の設定
 
@@ -100,15 +92,37 @@ VITE_API_BASE_URL=http://localhost:8000
 npm install
 ```
 
-#### 3.3 フロントエンドサーバーの起動
+### 4. 開発サーバーを一括起動（推奨）
 
 ```bash
-npm run dev
+make dev
 ```
 
-フロントエンドは http://localhost:5173 で起動します。
+1つのターミナルでバックエンドとフロントエンドが同時起動し、ログには`[backend]` / `[frontend]`のプレフィックスが付きます。  
+停止する場合は`Ctrl+C`、または別ターミナルで以下を実行してください。
 
-### 4. アプリケーションへのアクセス
+```bash
+make stop
+```
+
+### 5. 個別起動（デバッグ用）
+
+```bash
+# バックエンドのみ
+make dev-backend
+
+# フロントエンドのみ
+make dev-frontend
+```
+
+従来どおり以下の直接実行も可能です。
+
+```bash
+cd backend && uv run uvicorn main:app --reload
+cd frontend && npm run dev
+```
+
+### 6. アプリケーションへのアクセス
 
 ブラウザで http://localhost:5173 を開いてください。チャットインターフェースが表示され、設定したAPIキーに対応するLLMモデルが選択可能になります。
 
@@ -121,7 +135,9 @@ npm run dev
   - APIキーの前後に余分なスペースや引用符がないか確認してください。
 
 - **エラー: "Address already in use"**
-  - ポート8000が既に使用されています。他のプロセスを停止するか、別のポートを使用してください：
+  - ポート8000が既に使用されています。他のプロセスを停止するか、別のポートを使用してください。
+  - `make dev`で起動中なら、まず`make stop`で停止できます。
+  - 別ポートを使用する場合：
     ```bash
     uv run uvicorn main:app --reload --port 8001
     ```
@@ -155,10 +171,12 @@ npm test
 
 ## 開発
 
-バックエンドとフロントエンドを別々のターミナルで起動してください：
+リポジトリルートで以下のコマンドを利用できます。
 
-1. バックエンド: http://localhost:8000
-2. フロントエンド: http://localhost:5173
+- `make dev`: バックエンドとフロントエンドを同時起動
+- `make dev-backend`: バックエンドのみ起動
+- `make dev-frontend`: フロントエンドのみ起動
+- `make stop`: `make dev`で起動したプロセスを停止
 
 ## プロジェクト構造
 
