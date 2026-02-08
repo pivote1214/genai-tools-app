@@ -6,32 +6,79 @@ FastAPIを使用したAIチャットアプリケーションのバックエン�
 
 - Python 3.12+
 - uv (Pythonパッケージマネージャー)
+- OpenAI APIキーまたはAnthropic (Claude) APIキー（少なくとも1つ必要）
 
 ## セットアップ
 
-1. 環境変数の設定
+### 1. 環境変数の設定
 
 ```bash
 cp .env.example .env
 ```
 
 `.env`ファイルを編集して、APIキーを設定してください：
-- `OPENAI_API_KEY`: OpenAI APIキー
-- `ANTHROPIC_API_KEY`: Anthropic (Claude) APIキー
 
-2. 依存関係のインストール
+```bash
+# OpenAI API設定（OpenAIモデルを使用する場合）
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Anthropic (Claude) API設定（Claudeモデルを使用する場合）
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+
+# データベース設定（デフォルトのまま使用可能）
+DATABASE_URL=sqlite:///./chat.db
+
+# サーバー設定（デフォルトのまま使用可能）
+HOST=0.0.0.0
+PORT=8000
+
+# CORS設定（フロントエンドのURL、デフォルトのまま使用可能）
+FRONTEND_URL=http://localhost:5173
+```
+
+**重要**: 
+- 少なくとも`OPENAI_API_KEY`または`ANTHROPIC_API_KEY`のいずれか1つを設定する必要があります。
+- 両方のAPIキーを設定すると、すべてのモデルが利用可能になります。
+
+### 2. 依存関係のインストール
 
 ```bash
 uv sync
 ```
 
+これにより、`pyproject.toml`に定義されたすべての依存関係（`python-dotenv`を含む）がインストールされます。
+
+**注意**: `python-dotenv`パッケージにより、`.env`ファイルが自動的に読み込まれます。
+
 ## 開発サーバーの起動
+
+```bash
+uv run uvicorn main:app --reload
+```
+
+サーバーは http://localhost:8000 で起動します。
+
+**オプション**: ホストとポートを指定する場合：
 
 ```bash
 uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-サーバーは http://localhost:8000 で起動します。
+## テストの実行
+
+```bash
+# すべてのテストを実行
+uv run pytest
+
+# 詳細な出力で実行
+uv run pytest -v
+
+# 特定のテストファイルを実行
+uv run pytest tests/test_message_persistence.py
+
+# カバレッジレポートを生成
+uv run pytest --cov=app --cov-report=html
+```
 
 ## APIドキュメント
 

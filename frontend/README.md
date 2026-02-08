@@ -9,15 +9,22 @@ React + TypeScriptを使用したAIチャットアプリケーションのフロ
 
 ## セットアップ
 
-1. 環境変数の設定
+### 1. 環境変数の設定
 
 ```bash
 cp .env.example .env
 ```
 
-`.env`ファイルを編集して、バックエンドAPIのURLを設定してください（デフォルト: http://localhost:8000）
+`.env`ファイルを編集して、バックエンドAPIのURLを設定してください：
 
-2. 依存関係のインストール
+```bash
+# バックエンドAPIのURL
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+**注意**: デフォルト値は`http://localhost:8000`なので、バックエンドがデフォルトポートで起動している場合は編集不要です。
+
+### 2. 依存関係のインストール
 
 ```bash
 npm install
@@ -30,6 +37,21 @@ npm run dev
 ```
 
 サーバーは http://localhost:5173 で起動します。
+
+**注意**: バックエンドサーバーが起動していることを確認してください。
+
+## テストの実行
+
+```bash
+# すべてのテストを実行
+npm test
+
+# ウォッチモードでテストを実行
+npm run test:watch
+
+# カバレッジレポートを生成
+npm run test:coverage
+```
 
 ## ビルド
 
