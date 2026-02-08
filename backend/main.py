@@ -9,7 +9,7 @@ from logging.handlers import RotatingFileHandler
 from typing import List, Literal
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -238,6 +238,15 @@ async def list_conversations():
     """会話サマリー一覧を返す"""
     summaries = message_repository.get_conversation_summaries()
     return [ConversationSummary(**summary) for summary in summaries]
+
+
+@app.delete("/api/conversations/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_conversation(conversation_id: str):
+    """指定会話を削除する"""
+    deleted = message_repository.delete_conversation(conversation_id)
+    if not deleted:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="会話が見つかりません")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.get("/api/conversations/{conversation_id}/messages", response_model=List[StoredMessage])

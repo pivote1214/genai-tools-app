@@ -3,8 +3,10 @@ import type { ConversationSummary } from '../types'
 interface ConversationSidebarProps {
   conversations: ConversationSummary[]
   activeConversationId: string | null
+  deletingConversationId: string | null
   onSelectConversation: (conversationId: string) => void
   onCreateConversation: () => void
+  onDeleteConversation: (conversationId: string) => void
 }
 
 function formatUpdatedAt(value: string): string {
@@ -23,8 +25,10 @@ function formatUpdatedAt(value: string): string {
 export function ConversationSidebar({
   conversations,
   activeConversationId,
+  deletingConversationId,
   onSelectConversation,
   onCreateConversation,
+  onDeleteConversation,
 }: ConversationSidebarProps) {
   return (
     <aside className="glass-panel noise-overlay animate-riseIn relative flex h-[34vh] min-h-[250px] w-full flex-col overflow-hidden rounded-2xl md:h-auto md:min-h-0 md:w-[340px] md:rounded-3xl">
@@ -42,25 +46,44 @@ export function ConversationSidebar({
       <ul className="conversation-list flex-1 space-y-2 overflow-y-auto p-3 md:p-4">
         {conversations.map((conversation, index) => {
           const isActive = activeConversationId === conversation.id
+          const isDeleting = deletingConversationId === conversation.id
           return (
             <li key={conversation.id} className="animate-riseIn" style={{ animationDelay: `${Math.min(index, 8) * 40}ms` }}>
-              <button
-                className={`conversation-item w-full rounded-xl border px-3 py-3 text-left transition duration-200 md:px-4 ${
-                  isActive
-                    ? 'active border-signal-400/70 bg-signal-500/15 shadow-[0_0_0_1px_rgb(45_212_191_/_0.22)]'
-                    : 'border-ink-700/75 bg-ink-800/55 hover:border-accent-500/70 hover:bg-ink-800/80'
-                }`}
-                onClick={() => onSelectConversation(conversation.id)}
-                type="button"
-              >
-                <span className="conversation-title block text-sm font-semibold text-ink-50">{conversation.title}</span>
-                <span className="conversation-preview mt-1 block overflow-hidden text-xs leading-relaxed text-ink-100/75 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
-                  {conversation.last_message_preview || 'メッセージはまだありません'}
-                </span>
-                <span className="conversation-updated mt-2 block font-mono text-[11px] text-ink-100/55">
-                  {formatUpdatedAt(conversation.updated_at)}
-                </span>
-              </button>
+              <div className="flex items-stretch gap-2">
+                <button
+                  className={`conversation-item w-full rounded-xl border px-3 py-3 text-left transition duration-200 md:px-4 ${
+                    isActive
+                      ? 'active border-signal-400/70 bg-signal-500/15 shadow-[0_0_0_1px_rgb(45_212_191_/_0.22)]'
+                      : 'border-ink-700/75 bg-ink-800/55 hover:border-accent-500/70 hover:bg-ink-800/80'
+                  }`}
+                  onClick={() => onSelectConversation(conversation.id)}
+                  type="button"
+                >
+                  <span className="conversation-title block text-sm font-semibold text-ink-50">{conversation.title}</span>
+                  <span className="conversation-preview mt-1 block overflow-hidden text-xs leading-relaxed text-ink-100/75 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                    {conversation.last_message_preview || 'メッセージはまだありません'}
+                  </span>
+                  <span className="conversation-updated mt-2 block font-mono text-[11px] text-ink-100/55">
+                    {formatUpdatedAt(conversation.updated_at)}
+                  </span>
+                </button>
+                <button
+                  className="rounded-xl border border-warning-500/60 bg-warning-500/10 px-3 text-xs font-semibold text-warning-500 transition hover:bg-warning-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    const confirmed = window.confirm('このチャット履歴を削除しますか？')
+                    if (!confirmed) {
+                      return
+                    }
+                    onDeleteConversation(conversation.id)
+                  }}
+                  type="button"
+                  disabled={isDeleting}
+                  aria-label={`${conversation.title}を削除`}
+                >
+                  {isDeleting ? '削除中' : '削除'}
+                </button>
+              </div>
             </li>
           )
         })}

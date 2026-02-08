@@ -177,6 +177,22 @@ export class ChatService {
 
     return response.json();
   }
+
+  async deleteConversation(conversationId: string): Promise<void> {
+    const response = await fetch(
+      `${this.baseUrl}/api/conversations/${conversationId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  }
 }
 
 export const chatService = new ChatService();

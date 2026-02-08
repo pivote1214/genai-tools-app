@@ -136,6 +136,24 @@ class MessageRepository:
         finally:
             session.close()
 
+    def delete_conversation(self, conversation_id: str) -> bool:
+        """会話と関連メッセージを削除する。"""
+        session: Session = self.SessionLocal()
+        try:
+            conversation = session.get(Conversation, conversation_id)
+            if conversation is None:
+                return False
+
+            session.query(Message).filter(Message.conversation_id == conversation_id).delete()
+            session.delete(conversation)
+            session.commit()
+            return True
+        except Exception:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
     def ensure_conversation(self, conversation_id: str) -> Conversation:
         """会話が無ければ作成し、存在する会話を返す。"""
         session: Session = self.SessionLocal()

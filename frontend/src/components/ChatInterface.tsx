@@ -51,6 +51,7 @@ export function ChatInterface() {
   const [error, setError] = useState<string | null>(null)
   const [conversations, setConversations] = useState<ConversationSummary[]>([])
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null)
+  const [deletingConversationId, setDeletingConversationId] = useState<string | null>(null)
 
   const navigateToConversation = useCallback((conversationId: string, replace = false) => {
     const url = `/chat/${encodeURIComponent(conversationId)}`
@@ -171,6 +172,26 @@ export function ChatInterface() {
     }
   }
 
+  const handleDeleteConversation = async (conversationId: string) => {
+    if (deletingConversationId) return
+
+    setError(null)
+    setDeletingConversationId(conversationId)
+
+    try {
+      await chatService.deleteConversation(conversationId)
+      setConversations((prev) => prev.filter((item) => item.id !== conversationId))
+
+      if (activeConversationId === conversationId) {
+        await createConversation()
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'チャット履歴の削除に失敗しました')
+    } finally {
+      setDeletingConversationId(null)
+    }
+  }
+
   const handleSend = async (message: string) => {
     if (!message.trim() || isLoading) return
 
@@ -255,8 +276,12 @@ export function ChatInterface() {
         <ConversationSidebar
           conversations={conversations}
           activeConversationId={activeConversationId}
+          deletingConversationId={deletingConversationId}
           onSelectConversation={handleSelectConversation}
           onCreateConversation={handleCreateConversation}
+          onDeleteConversation={(conversationId) => {
+            void handleDeleteConversation(conversationId)
+          }}
         />
 
         <main className="chat-interface glass-panel noise-overlay animate-riseIn relative flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl md:rounded-3xl">
