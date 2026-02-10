@@ -6,7 +6,7 @@ import { describe, it, expect, beforeAll, afterAll, afterEach, vi } from 'vitest
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { ChatService } from '../../src/services/ChatService';
-import type { ModelInfo } from '../../src/types';
+import type { ModelInfo, ChatRequest } from '../../src/types';
 
 const API_BASE_URL = 'http://localhost:8000';
 const server = setupServer();
@@ -54,11 +54,11 @@ describe('ChatService', () => {
     });
 
     it('リクエストペイロードにconversation_idを含める', async () => {
-      let requestBody: any = null;
+      let requestBody: ChatRequest | null = null;
 
       server.use(
         http.post(`${API_BASE_URL}/api/chat`, async ({ request }) => {
-          requestBody = await request.json();
+          requestBody = (await request.json()) as ChatRequest;
           const stream = new ReadableStream({
             start(controller) {
               controller.enqueue(new TextEncoder().encode('data: {"done":true}\n\n'));

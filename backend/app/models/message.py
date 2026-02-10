@@ -1,4 +1,5 @@
 """メッセージ/会話モデル定義"""
+
 from datetime import datetime
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String

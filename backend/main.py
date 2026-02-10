@@ -1,12 +1,13 @@
 """
 FastAPI バックエンドのエントリーポイント
 """
+
 import json
 import logging
 import os
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
-from typing import List, Literal
+from typing import Literal
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Response, status
@@ -14,11 +15,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-# .envファイルを読み込み
-load_dotenv()
+# .envファイルを読み込み（importの前に実行する必要がある）
+load_dotenv()  # noqa: E402
 
-from app.repositories.message_repository import MessageRepository
-from app.services.llm_service import LLMService
+from app.repositories.message_repository import MessageRepository  # noqa: E402
+from app.services.llm_service import LLMService  # noqa: E402
 
 # ログ設定
 logging.basicConfig(
@@ -47,7 +48,7 @@ class ChatRequest(BaseModel):
     conversation_id: str
     message: str
     model: str
-    history: List[ChatMessage] = []
+    history: list[ChatMessage] = []
 
 
 class ModelInfo(BaseModel):
@@ -120,17 +121,23 @@ async def startup_event():
     google_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
     if not openai_key:
-        logger.warning("OPENAI_API_KEY is not set. OpenAI models will not be available.")
+        logger.warning(
+            "OPENAI_API_KEY is not set. OpenAI models will not be available."
+        )
     else:
         logger.info("OPENAI_API_KEY is configured")
 
     if not anthropic_key:
-        logger.warning("ANTHROPIC_API_KEY is not set. Claude models will not be available.")
+        logger.warning(
+            "ANTHROPIC_API_KEY is not set. Claude models will not be available."
+        )
     else:
         logger.info("ANTHROPIC_API_KEY is configured")
 
     if not google_key:
-        logger.warning("GEMINI_API_KEY / GOOGLE_API_KEY is not set. Gemini models will not be available.")
+        logger.warning(
+            "GEMINI_API_KEY / GOOGLE_API_KEY is not set. Gemini models will not be available."
+        )
     else:
         logger.info("Gemini API key is configured")
 
@@ -147,7 +154,7 @@ async def root():
     return {"message": "AI Chat MVP API"}
 
 
-@app.get("/api/models", response_model=List[ModelInfo])
+@app.get("/api/models", response_model=list[ModelInfo])
 async def get_models():
     """利用可能なLLMモデルのリストを返す"""
     openai_key = os.getenv("OPENAI_API_KEY")
@@ -233,28 +240,36 @@ async def create_conversation(request: ConversationCreateRequest | None = None):
     )
 
 
-@app.get("/api/conversations", response_model=List[ConversationSummary])
+@app.get("/api/conversations", response_model=list[ConversationSummary])
 async def list_conversations():
     """会話サマリー一覧を返す"""
     summaries = message_repository.get_conversation_summaries()
     return [ConversationSummary(**summary) for summary in summaries]
 
 
-@app.delete("/api/conversations/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete(
+    "/api/conversations/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT
+)
 async def delete_conversation(conversation_id: str):
     """指定会話を削除する"""
     deleted = message_repository.delete_conversation(conversation_id)
     if not deleted:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="会話が見つかりません")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="会話が見つかりません"
+        )
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@app.get("/api/conversations/{conversation_id}/messages", response_model=List[StoredMessage])
+@app.get(
+    "/api/conversations/{conversation_id}/messages", response_model=list[StoredMessage]
+)
 async def get_conversation_messages(conversation_id: str):
     """指定会話のメッセージ一覧を返す"""
     conversation = message_repository.get_conversation(conversation_id)
     if conversation is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="会話が見つかりません")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="会話が見つかりません"
+        )
 
     messages = message_repository.get_messages_by_conversation(conversation_id)
     return [
@@ -289,7 +304,9 @@ async def chat_stream(request: ChatRequest):
     async def generate():
         try:
             # メッセージ履歴を構築
-            messages = [{"role": msg.role, "content": msg.content} for msg in request.history]
+            messages = [
+                {"role": msg.role, "content": msg.content} for msg in request.history
+            ]
             messages.append({"role": "user", "content": request.message})
 
             full_response = ""
@@ -322,11 +339,15 @@ async def chat_stream(request: ChatRequest):
             # エラーの種類に応じてメッセージを変更
             error_str = str(e).lower()
             if "rate" in error_str or "quota" in error_str:
-                error_message = "リクエストが多すぎます。しばらく待ってから再試行してください"
+                error_message = (
+                    "リクエストが多すぎます。しばらく待ってから再試行してください"
+                )
             elif "auth" in error_str or "api key" in error_str:
                 error_message = "サービスに接続できません"
             elif "network" in error_str or "connection" in error_str:
-                error_message = "ネットワークエラーが発生しました。接続を確認してください"
+                error_message = (
+                    "ネットワークエラーが発生しました。接続を確認してください"
+                )
 
             yield f"data: {json.dumps({'error': error_message})}\n\n"
 

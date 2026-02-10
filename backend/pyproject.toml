@@ -18,6 +18,7 @@ dev = [
     "pytest>=9.0.2",
     "pytest-asyncio>=1.3.0",
     "pytest-cov>=7.0.0",
+    "ruff>=0.15.0",
 ]
 
 
@@ -42,3 +43,56 @@ precision = 2
 
 [tool.coverage.html]
 directory = "htmlcov"
+
+[tool.ruff]
+# 1行の最大文字数（Black互換）
+line-length = 88
+
+# 対象Pythonバージョン
+target-version = "py312"
+
+# 除外するファイル/ディレクトリ
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+    ".hypothesis",
+    ".pytest_cache",
+]
+
+[tool.ruff.lint]
+# 有効にするルール（バランス型）
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort (import整列)
+    "N",    # pep8-naming
+    "UP",   # pyupgrade (Python構文の最新化)
+    "B",    # flake8-bugbear (バグを見つける)
+    "C4",   # flake8-comprehensions (リスト内包表記)
+    "SIM",  # flake8-simplify (コード簡略化)
+]
+
+# 無視するルール
+ignore = [
+    "E501",  # 行が長すぎる（formatterに任せる）
+]
+
+# ファイルごとに無視するルール
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]  # テストでassert使用OK
+"__init__.py" = ["F401"]    # 未使用import OK
+
+[tool.ruff.format]
+# クォートスタイル
+quote-style = "double"
+
+# インデント
+indent-style = "space"
+
+[tool.ruff.lint.isort]
+# 自プロジェクトのパッケージ名
+known-first-party = ["app"]

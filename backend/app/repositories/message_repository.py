@@ -1,7 +1,7 @@
 """メッセージ/会話リポジトリ"""
+
 import logging
 from datetime import datetime
-from typing import List
 from uuid import uuid4
 
 from sqlalchemy import create_engine, inspect, text
@@ -22,7 +22,9 @@ class MessageRepository:
     def __init__(self, db_url: str = "sqlite:///./chat.db"):
         self.engine = create_engine(db_url, connect_args={"check_same_thread": False})
         Base.metadata.create_all(self.engine)
-        self.SessionLocal = sessionmaker(bind=self.engine, autocommit=False, autoflush=False)
+        self.SessionLocal = sessionmaker(
+            bind=self.engine, autocommit=False, autoflush=False
+        )
         self._migrate_schema()
 
     def _migrate_schema(self) -> None:
@@ -37,7 +39,9 @@ class MessageRepository:
         with self.engine.begin() as connection:
             if "conversation_id" not in message_columns:
                 logger.info("Adding conversation_id column to messages table")
-                connection.execute(text("ALTER TABLE messages ADD COLUMN conversation_id VARCHAR"))
+                connection.execute(
+                    text("ALTER TABLE messages ADD COLUMN conversation_id VARCHAR")
+                )
 
             connection.execute(
                 text(
@@ -144,7 +148,9 @@ class MessageRepository:
             if conversation is None:
                 return False
 
-            session.query(Message).filter(Message.conversation_id == conversation_id).delete()
+            session.query(Message).filter(
+                Message.conversation_id == conversation_id
+            ).delete()
             session.delete(conversation)
             session.commit()
             return True
@@ -227,7 +233,7 @@ class MessageRepository:
         finally:
             session.close()
 
-    def get_messages_by_conversation(self, conversation_id: str) -> List[Message]:
+    def get_messages_by_conversation(self, conversation_id: str) -> list[Message]:
         """会話ID単位でメッセージを取得する。"""
         session: Session = self.SessionLocal()
         try:
@@ -240,7 +246,7 @@ class MessageRepository:
         finally:
             session.close()
 
-    def get_conversation_summaries(self) -> List[dict]:
+    def get_conversation_summaries(self) -> list[dict]:
         """会話サマリー一覧を更新日時降順で取得する。"""
         session: Session = self.SessionLocal()
         try:
@@ -278,7 +284,7 @@ class MessageRepository:
         finally:
             session.close()
 
-    def get_all_messages(self) -> List[Message]:
+    def get_all_messages(self) -> list[Message]:
         """全メッセージを取得する（互換維持）。"""
         session: Session = self.SessionLocal()
         try:

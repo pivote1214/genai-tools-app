@@ -3,9 +3,11 @@
 
 選択したモデルがそのままLLMサービスへ渡されることを検証する。
 """
+
+from unittest.mock import MagicMock, patch
+
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch, MagicMock
 
 from main import app
 
@@ -43,10 +45,13 @@ def mock_message_repository():
         "claude-haiku-4-5",
     ],
 )
-def test_chat_routes_selected_model(client, mock_llm_service, mock_message_repository, model):
+def test_chat_routes_selected_model(
+    client, mock_llm_service, mock_message_repository, model
+):
     """
     /api/chatが選択されたモデルをそのままLLMサービスへ渡すことを検証
     """
+
     async def mock_stream():
         yield "ok"
 

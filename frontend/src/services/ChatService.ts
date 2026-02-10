@@ -161,15 +161,12 @@ export class ChatService {
   }
 
   async getConversationMessages(conversationId: string): Promise<ConversationMessage[]> {
-    const response = await fetch(
-      `${this.baseUrl}/api/conversations/${conversationId}/messages`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(`${this.baseUrl}/api/conversations/${conversationId}/messages`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -179,15 +176,12 @@ export class ChatService {
   }
 
   async deleteConversation(conversationId: string): Promise<void> {
-    const response = await fetch(
-      `${this.baseUrl}/api/conversations/${conversationId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(`${this.baseUrl}/api/conversations/${conversationId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

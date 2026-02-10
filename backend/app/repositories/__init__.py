@@ -1,6 +1,7 @@
 """
 データベースリポジトリ
 """
+
 from app.repositories.message_repository import MessageRepository
 
-__all__ = ['MessageRepository']
+__all__ = ["MessageRepository"]

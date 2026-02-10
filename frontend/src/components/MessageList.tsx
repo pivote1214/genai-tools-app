@@ -1,22 +1,22 @@
-import { useEffect, useRef } from 'react'
-import type { Message } from '../types'
-import { getModelDisplayName } from '../constants/modelDisplay'
+import { useEffect, useRef } from 'react';
+import type { Message } from '../types';
+import { getModelDisplayName } from '../constants/modelDisplay';
 
 interface MessageListProps {
-  messages: Message[]
+  messages: Message[];
 }
 
 export function MessageList({ messages }: MessageListProps) {
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   return (
     <div className="message-list relative flex flex-1 flex-col gap-4 overflow-y-auto px-4 py-5 md:px-7">
       {messages.map((message, index) => {
-        const isUser = message.role === 'user'
+        const isUser = message.role === 'user';
         return (
           <div
             key={message.id}
@@ -39,9 +39,9 @@ export function MessageList({ messages }: MessageListProps) {
               {message.content || (isUser ? '' : '...')}
             </div>
           </div>
-        )
+        );
       })}
       <div ref={messagesEndRef} />
     </div>
-  )
+  );
 }

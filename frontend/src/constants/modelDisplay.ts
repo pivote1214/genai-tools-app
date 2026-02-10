@@ -6,8 +6,8 @@ const MODEL_DISPLAY_NAMES: Record<string, string> = {
   'claude-opus-4-5': 'Claude 4.5 Opus',
   'claude-sonnet-4-5': 'Claude 4.5 Sonnet',
   'claude-haiku-4-5': 'Claude 4.5 Haiku',
-}
+};
 
 export function getModelDisplayName(modelId: string): string {
-  return MODEL_DISPLAY_NAMES[modelId] ?? modelId
+  return MODEL_DISPLAY_NAMES[modelId] ?? modelId;
 }

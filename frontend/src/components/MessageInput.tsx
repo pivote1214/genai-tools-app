@@ -1,13 +1,13 @@
-import type { ModelInfo } from '../types'
+import type { ModelInfo } from '../types';
 
 interface MessageInputProps {
-  value: string
-  selectedModel: string
-  availableModels: ModelInfo[]
-  isLoading: boolean
-  onSend: (message: string) => void
-  onChange: (value: string) => void
-  onModelChange: (model: string) => void
+  value: string;
+  selectedModel: string;
+  availableModels: ModelInfo[];
+  isLoading: boolean;
+  onSend: (message: string) => void;
+  onChange: (value: string) => void;
+  onModelChange: (model: string) => void;
 }
 
 export function MessageInput({
@@ -21,30 +21,36 @@ export function MessageInput({
 }: MessageInputProps) {
   const submitMessage = () => {
     if (value.trim() && !isLoading) {
-      onSend(value)
+      onSend(value);
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    submitMessage()
-  }
+    e.preventDefault();
+    submitMessage();
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.nativeEvent.isComposing) {
-      return
+      return;
     }
 
     if (e.key === 'Enter' && e.metaKey) {
-      e.preventDefault()
-      submitMessage()
+      e.preventDefault();
+      submitMessage();
     }
-  }
+  };
 
   return (
-    <form className="message-input glass-panel noise-overlay m-3 rounded-2xl border-ink-700/80 p-3 md:m-5 md:p-4" onSubmit={handleSubmit}>
+    <form
+      className="message-input glass-panel noise-overlay m-3 rounded-2xl border-ink-700/80 p-3 md:m-5 md:p-4"
+      onSubmit={handleSubmit}
+    >
       <div className="input-controls mb-3 flex items-center justify-between gap-3">
-        <label className="text-[11px] font-semibold tracking-[0.14em] text-ink-100" htmlFor="model-selector">
+        <label
+          className="text-[11px] font-semibold tracking-[0.14em] text-ink-100"
+          htmlFor="model-selector"
+        >
           MODEL
         </label>
         <select
@@ -76,9 +82,13 @@ export function MessageInput({
           className="send-button mb-1 inline-flex h-11 min-w-[102px] items-center justify-center rounded-xl border border-accent-500/80 bg-accent-500 px-4 font-semibold tracking-[0.08em] text-ink-950 transition duration-200 hover:-translate-y-0.5 hover:bg-accent-600 disabled:cursor-not-allowed disabled:border-ink-700 disabled:bg-ink-700 disabled:text-ink-100/70"
           disabled={!value.trim() || isLoading}
         >
-          {isLoading ? <span className="loading-indicator font-mono text-xs">送信中...</span> : '送信'}
+          {isLoading ? (
+            <span className="loading-indicator font-mono text-xs">送信中...</span>
+          ) : (
+            '送信'
+          )}
         </button>
       </div>
     </form>
-  )
+  );
 }

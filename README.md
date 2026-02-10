@@ -194,6 +194,45 @@ npm test
 - `make dev-frontend`: フロントエンドのみ起動
 - `make stop`: `make dev`で起動したプロセスを停止
 
+## コードフォーマット・リント
+
+### バックエンド（Python）
+
+バックエンドでは **Ruff** を使用してコードのフォーマットとリントを行います。
+
+```bash
+cd backend
+
+# コードフォーマット
+uv run ruff format .
+
+# リントチェック
+uv run ruff check .
+
+# リントの自動修正
+uv run ruff check --fix .
+```
+
+### フロントエンド（TypeScript/React）
+
+フロントエンドでは **Prettier** と **ESLint** を使用してコードのフォーマットとリントを行います。
+
+```bash
+cd frontend
+
+# コードフォーマット
+npm run format
+
+# フォーマットチェック（CIなどで使用）
+npm run format:check
+
+# リントチェック
+npm run lint
+
+# リントの自動修正
+npm run lint:fix
+```
+
 ## プロジェクト構造
 
 ```

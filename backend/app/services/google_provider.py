@@ -1,5 +1,5 @@
 import os
-from typing import AsyncIterator, Dict, List
+from collections.abc import AsyncIterator
 
 from openai import AsyncOpenAI
 
@@ -16,7 +16,9 @@ class GoogleProvider(LLMProvider):
         Args:
             api_key: Google APIキー。Noneの場合は環境変数から読み込む
         """
-        self.api_key = api_key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        self.api_key = (
+            api_key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        )
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY or GOOGLE_API_KEY is not set")
 
@@ -27,7 +29,7 @@ class GoogleProvider(LLMProvider):
 
     async def stream_chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         model: str,
     ) -> AsyncIterator[str]:
         """

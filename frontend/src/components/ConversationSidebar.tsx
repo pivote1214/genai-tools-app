@@ -1,25 +1,25 @@
-import type { ConversationSummary } from '../types'
+import type { ConversationSummary } from '../types';
 
 interface ConversationSidebarProps {
-  conversations: ConversationSummary[]
-  activeConversationId: string | null
-  deletingConversationId: string | null
-  onSelectConversation: (conversationId: string) => void
-  onCreateConversation: () => void
-  onDeleteConversation: (conversationId: string) => void
+  conversations: ConversationSummary[];
+  activeConversationId: string | null;
+  deletingConversationId: string | null;
+  onSelectConversation: (conversationId: string) => void;
+  onCreateConversation: () => void;
+  onDeleteConversation: (conversationId: string) => void;
 }
 
 function formatUpdatedAt(value: string): string {
-  const date = new Date(value)
+  const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return ''
+    return '';
   }
   return date.toLocaleString('ja-JP', {
     month: 'numeric',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  })
+  });
 }
 
 export function ConversationSidebar({
@@ -45,10 +45,14 @@ export function ConversationSidebar({
       </div>
       <ul className="conversation-list flex-1 space-y-2 overflow-y-auto p-3 md:p-4">
         {conversations.map((conversation, index) => {
-          const isActive = activeConversationId === conversation.id
-          const isDeleting = deletingConversationId === conversation.id
+          const isActive = activeConversationId === conversation.id;
+          const isDeleting = deletingConversationId === conversation.id;
           return (
-            <li key={conversation.id} className="animate-riseIn" style={{ animationDelay: `${Math.min(index, 8) * 40}ms` }}>
+            <li
+              key={conversation.id}
+              className="animate-riseIn"
+              style={{ animationDelay: `${Math.min(index, 8) * 40}ms` }}
+            >
               <div className="flex items-stretch gap-2">
                 <button
                   className={`conversation-item w-full rounded-xl border px-3 py-3 text-left transition duration-200 md:px-4 ${
@@ -59,7 +63,9 @@ export function ConversationSidebar({
                   onClick={() => onSelectConversation(conversation.id)}
                   type="button"
                 >
-                  <span className="conversation-title block text-sm font-semibold text-ink-50">{conversation.title}</span>
+                  <span className="conversation-title block text-sm font-semibold text-ink-50">
+                    {conversation.title}
+                  </span>
                   <span className="conversation-preview mt-1 block overflow-hidden text-xs leading-relaxed text-ink-100/75 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
                     {conversation.last_message_preview || 'メッセージはまだありません'}
                   </span>
@@ -70,12 +76,12 @@ export function ConversationSidebar({
                 <button
                   className="rounded-xl border border-warning-500/60 bg-warning-500/10 px-3 text-xs font-semibold text-warning-500 transition hover:bg-warning-500/20 disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={(event) => {
-                    event.stopPropagation()
-                    const confirmed = window.confirm('このチャット履歴を削除しますか？')
+                    event.stopPropagation();
+                    const confirmed = window.confirm('このチャット履歴を削除しますか？');
                     if (!confirmed) {
-                      return
+                      return;
                     }
-                    onDeleteConversation(conversation.id)
+                    onDeleteConversation(conversation.id);
                   }}
                   type="button"
                   disabled={isDeleting}
@@ -85,9 +91,9 @@ export function ConversationSidebar({
                 </button>
               </div>
             </li>
-          )
+          );
         })}
       </ul>
     </aside>
-  )
+  );
 }
